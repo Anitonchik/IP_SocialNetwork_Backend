@@ -8,6 +8,16 @@ group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 description = 'Demo project for Spring Boot'
 
+defaultTasks "bootRun"
+
+jar {
+	enabled = false
+}
+
+bootJar {
+	archiveFileName = String.format("%s-%s.jar", rootProject.name, version)
+}
+
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
@@ -18,12 +28,25 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+	springdocVersion = "2.8.11"
+	mockitoVersion = "5.19.0"
+}
+
+configurations {
+	mockitoAgent
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
+tasks.named("test") {
 	useJUnitPlatform()
+	jvmArgs += "-Xshare:off"
+	jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
 }
