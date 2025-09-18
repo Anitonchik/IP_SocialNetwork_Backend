@@ -1,5 +1,6 @@
-package com.example.SocialNetwork.api;
+package com.example.SocialNetwork.api.User;
 
+import com.example.SocialNetwork.api.NotFoundException;
 import com.example.SocialNetwork.configuration.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RestController
 @RequestMapping(Constants.API_URL + UserController.URL)
 public class UserController {
-    public static final String URL = "/user";
+    public static final String URL = "/users";
     private final Logger log = LoggerFactory.getLogger(UserController.class);
     private final AtomicInteger idGenerator = new AtomicInteger();
     private List<UserDTO> users = new CopyOnWriteArrayList<>();
@@ -63,6 +64,7 @@ public class UserController {
         existsUser.setLastName(newUser.getLastName());
         existsUser.setUserName(newUser.getUserName());
         existsUser.setUserAvatarURL(newUser.getUserAvatarURL());
+        existsUser.setUserDescription(newUser.getUserDescription());
         existsUser.setPublications(newUser.getPublications());
         existsUser.setFollowers(newUser.getFollowers());
         existsUser.setSubscriptions(newUser.getSubscriptions());

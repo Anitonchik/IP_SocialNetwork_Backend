@@ -1,4 +1,4 @@
-package com.example.SocialNetwork.api;
+package com.example.SocialNetwork.api.User;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -35,7 +35,7 @@ public class UserDTO {
         this.userDescription = userDescription;
         this.pageAddress = pageAddress;
         this.publications = publications;
-        this. followers = followers;
+        this.followers = followers;
         this.subscriptions = subscriptions;
         this.phone = phone;
     }
@@ -117,6 +117,14 @@ public class UserDTO {
 
     public void setSubscriptions(int subscriptions) {
         this.subscriptions = subscriptions;
+    }
+
+    public String getUserDescription() {
+        return userDescription;
+    }
+
+    public void setUserDescription(String userDescription) {
+        this.userDescription = userDescription;
     }
 
 

@@ -1,5 +1,7 @@
-package com.example.SocialNetwork.api;
+package com.example.SocialNetwork.api.Post;
 
+import com.example.SocialNetwork.api.NotFoundException;
+import com.example.SocialNetwork.api.User.UserController;
 import com.example.SocialNetwork.configuration.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +34,22 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostDTO> getAll() {
+    public List<PostDTO> getPosts() {
         return posts;
+    }
+
+    @GetMapping("/usersPosts/{id}")
+    public List<PostDTO> getPostsByUser(@PathVariable int id) {
+        List<PostDTO> userPosts = new ArrayList<>();
+        posts.stream().filter(postDTO -> postDTO.getUserId() == id).forEach(userPosts::add);
+        return userPosts;
+    }
+
+    @GetMapping("/notUsersPosts/{id}")
+    public List<PostDTO> getPostsNotByUser(@PathVariable int id) {
+        List<PostDTO> notUsersPosts = new ArrayList<>();
+        posts.stream().filter(postDTO -> postDTO.getUserId() != id).forEach(notUsersPosts::add);
+        return notUsersPosts;
     }
 
     @GetMapping("/{id}")
@@ -62,6 +78,9 @@ public class PostController {
         existsPost.setUserAvatarURL(newPost.getUserAvatarURL());
         existsPost.setPostImageURL(newPost.getPostImageURL());
         existsPost.setPostTextContent(newPost.getPostTextContent());
+
+        this.posts.forEach(post -> post.setUserName(userController.get(post.getUserId()).getUserName()));
+        this.posts.forEach(post -> post.setUserAvatarURL(userController.get(post.getUserId()).getUserAvatarURL()));
         return existsPost;
     }
 

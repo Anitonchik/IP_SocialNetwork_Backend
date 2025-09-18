@@ -1,4 +1,4 @@
-package com.example.SocialNetwork.api;
+package com.example.SocialNetwork.api.Post;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
