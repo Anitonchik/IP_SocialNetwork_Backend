@@ -1,9 +1,12 @@
 package com.example.SocialNetwork.api.Chat;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 import java.util.List;
 
 public class MessageDTO {
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int id;
     private int chatId;
     private int userId;

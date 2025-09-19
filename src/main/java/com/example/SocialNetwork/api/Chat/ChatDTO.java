@@ -10,16 +10,20 @@ public class ChatDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int id;
     private String chatName;
+    private String chatAvatar;
     private chatType chatType;
     private Date createdAt;
     private List<Integer> participants;
+    private List<MessageDTO> messages;
 
     public ChatDTO() {
     }
 
-    public ChatDTO(int id, String chatName, chatType chatType, Date createdAt, List<Integer> participants) {
+    public ChatDTO(int id, String chatName, String chatAvatar, chatType chatType,
+                   Date createdAt, List<Integer> participants) {
         this.id = id;
         this.chatName = chatName;
+        this.chatAvatar = chatAvatar;
         this.chatType = chatType;
         this.createdAt = createdAt;
         this.participants = participants;
@@ -39,6 +43,14 @@ public class ChatDTO {
 
     public void setChatName(String chatName) {
         this.chatName = chatName;
+    }
+
+    public String getChatAvatar() {
+        return chatAvatar;
+    }
+
+    public void setChatAvatar(String chatAvatar) {
+        this.chatAvatar = chatAvatar;
     }
 
     public chatType getChatType() {
@@ -64,4 +76,13 @@ public class ChatDTO {
     public void setParticipants(List<Integer> participants) {
         this.participants = participants;
     }
+
+    public List<MessageDTO> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<MessageDTO> messages) {
+        this.messages = messages;
+    }
+
 }

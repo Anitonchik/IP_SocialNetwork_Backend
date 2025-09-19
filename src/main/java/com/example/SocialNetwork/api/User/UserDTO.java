@@ -9,11 +9,11 @@ import java.util.List;
 public class UserDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int id;
-    @JsonProperty("first_name")
+    @JsonProperty("firstName")
     private String firstName;
-    @JsonProperty("last_name")
+    @JsonProperty("lastName")
     private String lastName;
-    @JsonProperty("user_name")
+    @JsonProperty("userName")
     private String userName;
     private String userAvatarURL;
     private String userDescription;

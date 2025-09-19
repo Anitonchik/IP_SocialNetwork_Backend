@@ -47,6 +47,13 @@ public class MessageController {
                 .orElseThrow(() -> new NotFoundException(UserDTO.class, id));
     }
 
+    @GetMapping("/fromChat/{chatId}")
+    public List<MessageDTO> getMessagesByChat(@PathVariable int chatId) {
+        log.debug("Get messages id {}", chatId);
+        return messages.stream()
+                .filter(chat -> chat.getId() == chatId).toList();
+    }
+
     @PostMapping
     public MessageDTO create(@RequestBody MessageDTO newMessage) {
         log.debug("Create message with data {}", newMessage);
