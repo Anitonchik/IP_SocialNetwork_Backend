@@ -26,9 +26,11 @@ public class MessageController {
         this.messages = new ArrayList<>(List.of(
                 new MessageDTO(idGenerator.incrementAndGet(), 1, 1, "blablabla",
                         new Date(), new ArrayList<>(), new ArrayList<>(List.of(new ReadStatusDTO(1, new Date())))),
-                new MessageDTO(idGenerator.incrementAndGet(), 1, 1, "blablabla",
+                new MessageDTO(idGenerator.incrementAndGet(), 1, 2, "dfgfg",
                         new Date(), new ArrayList<>(), new ArrayList<>(List.of(new ReadStatusDTO(1, new Date())))),
-                new MessageDTO(idGenerator.incrementAndGet(), 1, 1, "blablabla",
+                new MessageDTO(idGenerator.incrementAndGet(), 1, 2, "hehe",
+                        new Date(), new ArrayList<>(), new ArrayList<>(List.of(new ReadStatusDTO(1, new Date())))),
+                new MessageDTO(idGenerator.incrementAndGet(), 1, 1, "sfg",
                         new Date(), new ArrayList<>(), new ArrayList<>(List.of(new ReadStatusDTO(1, new Date()))))));
     }
 
@@ -51,7 +53,7 @@ public class MessageController {
     public List<MessageDTO> getMessagesByChat(@PathVariable int chatId) {
         log.debug("Get messages id {}", chatId);
         return messages.stream()
-                .filter(chat -> chat.getId() == chatId).toList();
+                .filter(message -> message.getChatId() == chatId).toList();
     }
 
     @PostMapping

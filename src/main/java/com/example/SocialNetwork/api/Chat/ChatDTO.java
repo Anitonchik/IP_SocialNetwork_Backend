@@ -1,6 +1,6 @@
 package com.example.SocialNetwork.api.Chat;
 
-import com.example.SocialNetwork.chatType;
+import com.example.SocialNetwork.api.User.UserDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
@@ -9,9 +9,7 @@ import java.util.List;
 public class ChatDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int id;
-    private String chatName;
-    private String chatAvatar;
-    private chatType chatType;
+    private UserDTO chatUser;
     private Date createdAt;
     private List<Integer> participants;
     private List<MessageDTO> messages;
@@ -19,12 +17,8 @@ public class ChatDTO {
     public ChatDTO() {
     }
 
-    public ChatDTO(int id, String chatName, String chatAvatar, chatType chatType,
-                   Date createdAt, List<Integer> participants) {
+    public ChatDTO(int id, Date createdAt, List<Integer> participants) {
         this.id = id;
-        this.chatName = chatName;
-        this.chatAvatar = chatAvatar;
-        this.chatType = chatType;
         this.createdAt = createdAt;
         this.participants = participants;
     }
@@ -37,28 +31,12 @@ public class ChatDTO {
         this.id = id;
     }
 
-    public String getChatName() {
-        return chatName;
+    public UserDTO getUser() {
+        return chatUser;
     }
 
-    public void setChatName(String chatName) {
-        this.chatName = chatName;
-    }
-
-    public String getChatAvatar() {
-        return chatAvatar;
-    }
-
-    public void setChatAvatar(String chatAvatar) {
-        this.chatAvatar = chatAvatar;
-    }
-
-    public chatType getChatType() {
-        return chatType;
-    }
-
-    public void setChatType(chatType chatType) {
-        this.chatType = chatType;
+    public void setUser(UserDTO chatUser) {
+        this.chatUser = chatUser;
     }
 
     public Date getCreatedAt() {
