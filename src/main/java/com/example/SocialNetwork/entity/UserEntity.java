@@ -1,30 +1,25 @@
-package com.example.SocialNetwork.api.User;
+package com.example.SocialNetwork.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-public class UserDTO {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private int id;
-    @JsonProperty("firstName")
+public class UserEntity extends BaseEntity{
+    private Long id;
     private String firstName;
-    @JsonProperty("lastName")
     private String lastName;
-    @JsonProperty("userName")
     private String userName;
     private String userAvatarURL;
     private String userDescription;
     private String pageAddress;
     private int publications;
-    private List<UserToUserDTO> followers;
-    private List<UserToUserDTO> subscriptions;
+    private List<UserToUserEntity> followers;
+    private List<UserToUserEntity> subscriptions;
     private String phone;
 
-    public UserDTO (int id, String firstName, String lastName, String userName, String userAvatarURL,
+    public UserEntity(){super();}
+
+    public UserEntity (Long id, String firstName, String lastName, String userName, String userAvatarURL,
                     String userDescription, String pageAddress, String phone) {
+        this();
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,11 +30,11 @@ public class UserDTO {
         this.phone = phone;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -98,19 +93,19 @@ public class UserDTO {
         this.publications = publications;
     }
 
-    public List<UserToUserDTO> getFollowers() {
+    public List<UserToUserEntity> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(List<UserToUserDTO> followers) {
+    public void setFollowers(List<UserToUserEntity> followers) {
         this.followers = followers;
     }
 
-    public List<UserToUserDTO> getSubscriptions() {
+    public List<UserToUserEntity> getSubscriptions() {
         return subscriptions;
     }
 
-    public void setSubscriptions(List<UserToUserDTO> subscriptions) {
+    public void setSubscriptions(List<UserToUserEntity> subscriptions) {
         this.subscriptions = subscriptions;
     }
 
@@ -121,7 +116,4 @@ public class UserDTO {
     public void setUserDescription(String userDescription) {
         this.userDescription = userDescription;
     }
-
-
-
 }

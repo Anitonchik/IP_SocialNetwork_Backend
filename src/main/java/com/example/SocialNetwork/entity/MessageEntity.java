@@ -1,13 +1,10 @@
-package com.example.SocialNetwork.api.Chat;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.example.SocialNetwork.entity;
 
 import java.util.Date;
 import java.util.List;
 
-public class MessageDTO {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private int id;
+public class MessageEntity extends BaseEntity{
+    private Long id;
     private int chatId;
     private int userId;
     private String messageText;
@@ -15,10 +12,9 @@ public class MessageDTO {
     private Boolean isEdited;
     private List<String> attachments;
 
-    public MessageDTO() {
-    }
+    public MessageEntity() {super();}
 
-    public MessageDTO(int id, int chatId, int userId, String messageText, Date createdAt,
+    public MessageEntity(Long id, int chatId, int userId, String messageText, Date createdAt,
                       List<String> attachments) {
         this.id = id;
         this.chatId = chatId;
@@ -29,11 +25,11 @@ public class MessageDTO {
         this.isEdited = false;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

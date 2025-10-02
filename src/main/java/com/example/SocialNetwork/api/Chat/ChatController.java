@@ -53,10 +53,23 @@ public class ChatController {
     @GetMapping("/{id}")
     public ChatDTO get(@PathVariable int id) {
         log.debug("Get user wtih id {}", id);
-        return chats.stream()
+        var someChat =  chats.stream()
                 .filter(chat -> chat.getId() == id)
                 .findAny()
                 .orElseThrow(() -> new NotFoundException(UserDTO.class, id));
+        someChat.setMessages(messageController.getMessagesByChat(someChat.getId()));
+        return someChat;
+    }
+
+    @GetMapping("/{userId}/{subscribtedUserId}")
+    public ChatDTO get(@PathVariable int userId, @PathVariable int subscribtedUserId) {
+        log.debug("Get user wtih id {}", userId);
+        var someChat =  chats.stream()
+                .filter(chat -> chat.getParticipants().getFirst() == userId || chat.getParticipants().get(1) == userId)
+                .findAny()
+                .orElseThrow(() -> new NotFoundException(UserDTO.class, userId));
+        someChat.setMessages(messageController.getMessagesByChat(someChat.getId()));
+        return someChat;
     }
 
     @PostMapping
@@ -65,14 +78,6 @@ public class ChatController {
         newChat.setId(idGenerator.incrementAndGet());
         chats.add(newChat);
         return newChat;
-    }
-
-    @PutMapping("/{id}")
-    public ChatDTO edit(@PathVariable int id, @RequestBody ChatDTO newChat) {
-        log.debug("Edit chat with id {} and data {}", id, newChat);
-        final ChatDTO existsChat = get(id);
-        existsChat.setParticipants(newChat.getParticipants());
-        return existsChat;
     }
 
     @DeleteMapping("/{id}")

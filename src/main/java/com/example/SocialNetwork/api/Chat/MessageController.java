@@ -25,13 +25,13 @@ public class MessageController {
     public MessageController() {
         this.messages = new ArrayList<>(List.of(
                 new MessageDTO(idGenerator.incrementAndGet(), 1, 1, "blablabla",
-                        new Date(), new ArrayList<>(), new ArrayList<>(List.of(new ReadStatusDTO(1, new Date())))),
+                        new Date(), new ArrayList<>()),
                 new MessageDTO(idGenerator.incrementAndGet(), 1, 2, "dfgfg",
-                        new Date(), new ArrayList<>(), new ArrayList<>(List.of(new ReadStatusDTO(1, new Date())))),
+                        new Date(), new ArrayList<>()),
                 new MessageDTO(idGenerator.incrementAndGet(), 1, 2, "hehe",
-                        new Date(), new ArrayList<>(), new ArrayList<>(List.of(new ReadStatusDTO(1, new Date())))),
+                        new Date(), new ArrayList<>()),
                 new MessageDTO(idGenerator.incrementAndGet(), 1, 1, "sfg",
-                        new Date(), new ArrayList<>(), new ArrayList<>(List.of(new ReadStatusDTO(1, new Date()))))));
+                        new Date(), new ArrayList<>())));
     }
 
     @GetMapping
@@ -71,6 +71,7 @@ public class MessageController {
         existsMessage.setMessageText(newMessage.getMessageText());
         existsMessage.setAttachments(newMessage.getAttachments());
         existsMessage.setCreatedAt(newMessage.getCreatedAt());
+        existsMessage.setIsEdited(true);
         return existsMessage;
     }
 
