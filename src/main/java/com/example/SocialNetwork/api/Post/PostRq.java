@@ -5,16 +5,16 @@ import jakarta.validation.constraints.NotNull;
 
 public class PostRq {
         @NotNull
-        private UserRq user;
+        private Long userId;
         private String postImageURL;
         private String postTextContent;
 
-        public UserRq getUser() {
-            return user;
+        public Long getUserId() {
+            return userId;
         }
 
-        public void setUser(UserRq user) {
-            this.user = user;
+        public void setUserId(Long userId) {
+            this.userId = userId;
         }
 
         public String getPostImageURL() {

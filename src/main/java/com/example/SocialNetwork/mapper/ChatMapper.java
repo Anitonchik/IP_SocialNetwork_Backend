@@ -24,11 +24,10 @@ public class ChatMapper {
         this.messageMapper = messageMapper;
     }
 
-    public ChatRq toRgDto(Date createdAt, List<UserRq> participants, List<MessageRq> messages) {
+    public ChatRq toRgDto(Date createdAt, List<Long> participants) {
         final ChatRq dto = new ChatRq();
         dto.setCreatedAt(createdAt);
         dto.setParticipants(participants);
-        dto.setMessages(messages);
         return dto;
     }
 

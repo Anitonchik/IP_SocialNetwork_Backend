@@ -1,20 +1,15 @@
 package com.example.SocialNetwork.entity;
 
 public class PostEntity extends BaseEntity{
-    private Long id;
     private UserEntity user;
     private String postImageURL;
     private String postTextContent;
 
-    public PostEntity (Long id, UserEntity user, String postImageURL, String postTextContent) {
-        this.id = id;
+    public PostEntity (UserEntity user, String postImageURL, String postTextContent) {
         this.user = user;
         this.postImageURL = postImageURL;
         this.postTextContent = postTextContent;
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
     public String getPostImageURL() { return postImageURL; }
     public void setPostImageURL(String postImageURL) { this.postImageURL = postImageURL; }
     public String getPostTextContent() { return postTextContent; }

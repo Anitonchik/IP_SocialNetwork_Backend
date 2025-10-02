@@ -1,15 +1,11 @@
 package com.example.SocialNetwork.api.Chat;
 
-import com.example.SocialNetwork.api.message.MessageRq;
-import com.example.SocialNetwork.api.user.UserRq;
-
 import java.util.Date;
 import java.util.List;
 
 public class ChatRq {
     private Date createdAt;
-    private List<UserRq> participants;
-    private List<MessageRq> messages;
+    private List<Long> participants;
 
     public Date getCreatedAt() {
         return createdAt;
@@ -19,19 +15,19 @@ public class ChatRq {
         this.createdAt = createdAt;
     }
 
-    public List<UserRq> getParticipants() {
+    public List<Long> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<UserRq> participants) {
+    public void setParticipants(List<Long> participants) {
         this.participants = participants;
     }
 
-    public List<MessageRq> getMessages() {
+   /* public List<MessageRq> getMessages() {
         return messages;
     }
 
     public void setMessages(List<MessageRq> messages) {
         this.messages = messages;
-    }
+    }*/
 }

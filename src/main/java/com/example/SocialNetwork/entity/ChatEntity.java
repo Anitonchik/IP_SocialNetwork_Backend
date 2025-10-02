@@ -6,34 +6,26 @@ import java.util.Date;
 import java.util.List;
 
 public class ChatEntity extends BaseEntity{
-    private Long id;
-    private UserDTO chatUser;
+    private UserEntity chatUser;
     private Date createdAt;
     private List<UserEntity> participants;
     private List<MessageEntity> messages;
 
     public ChatEntity() {super();}
 
-    public ChatEntity(Long id, Date createdAt, List<UserEntity> participants) {
+    public ChatEntity(Date createdAt, List<UserEntity> participants, List<MessageEntity> messages) {
         this();
-        this.id = id;
         this.createdAt = createdAt;
         this.participants = participants;
+        this.messages = messages;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public UserDTO getUser() {
+    public UserEntity getUser() {
         return chatUser;
     }
 
-    public void setUser(UserDTO chatUser) {
+    public void setUser(UserEntity chatUser) {
         this.chatUser = chatUser;
     }
 

@@ -2,72 +2,69 @@ package com.example.SocialNetwork.service;
 
 import com.example.SocialNetwork.api.NotFoundException;
 import com.example.SocialNetwork.api.Post.PostDTO;
+import com.example.SocialNetwork.api.Post.PostRq;
+import com.example.SocialNetwork.api.Post.PostRs;
+import com.example.SocialNetwork.entity.PostEntity;
+import com.example.SocialNetwork.entity.UserEntity;
+import com.example.SocialNetwork.mapper.PostMapper;
 import com.example.SocialNetwork.repository.PostRepository;
+import com.example.SocialNetwork.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class PostService {
-    final private PostRepository repository;
+    private final PostRepository repository;
+    private final UserService typeService;
+    private PostMapper mapper;
 
-
-    public PostService(PostRepository repository) {
+    public PostService(PostRepository repository, UserService typeService) {
         this.repository = repository;
+        this.typeService = typeService;
     }
 
-
-    @GetMapping
-    public List<PostDTO> getPosts() {
-        return posts;
+    public PostEntity getEntity(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException(PostEntity.class, id));
     }
 
-    @GetMapping("/usersPosts/{userId}")
-    public List<PostDTO> getPostsByUser(@PathVariable int userId) {
-        List<PostDTO> userPosts = new ArrayList<>();
-        posts.stream().filter(postDTO -> postDTO.getUser().getId() == userId).forEach(userPosts::add);
-        return userPosts;
+    public List<PostRs> getAll() {
+        return mapper.toRsListDto(repository.findAll());
     }
 
-    @GetMapping("/notUsersPosts/{userId}")
-    public List<PostDTO> getPostsNotByUser(@PathVariable int userId) {
-        List<PostDTO> notUsersPosts = new ArrayList<>();
-        posts.stream().filter(postDTO -> postDTO.getUser().getId() != userId).forEach(notUsersPosts::add);
-        return notUsersPosts;
+    public PostRs get(Long id) {
+        final PostEntity entity = getEntity(id);
+        return mapper.toRsDto(entity);
     }
 
-    @GetMapping("/{id}")
-    public PostDTO get(@PathVariable int id) {
-        return posts.stream()
-                .filter(group -> group.getId() == id)
-                .findAny()
-                .orElseThrow(() -> new NotFoundException(PostDTO.class, id));
+    public PostRs create(PostRq dto) {
+        final UserEntity user = typeService.getEntity(dto.getUserId());
+        PostEntity entity = new PostEntity(
+                user,
+                dto.getPostImageURL(),
+                dto.getPostTextContent());
+        entity = repository.save(entity);
+        return mapper.toRsDto(entity);
     }
 
-    @PostMapping
-    public PostDTO create(@RequestBody PostDTO newPost){
-        newPost.setId(idGenerator.incrementAndGet());
-        posts.add(newPost);
+    public PostRs update(Long id, PostRq dto) {
+        PostEntity entity = getEntity(id);
 
-        return posts.getLast();
+        entity.setUser(typeService.getEntity(dto.getUserId()));
+        entity.setPostImageURL(dto.getPostImageURL());
+        entity.setPostTextContent(dto.getPostTextContent());
+        entity = repository.save(entity);
+        return mapper.toRsDto(entity);
     }
 
-    @PutMapping("/{id}")
-    public PostDTO update(@PathVariable int id, @RequestBody PostDTO newPost) {
-        log.debug("Edit student with id {} and data {}", id, newPost);
-        final PostDTO existsPost = get(id);
-        existsPost.setPostImageURL(newPost.getPostImageURL());
-        existsPost.setPostTextContent(newPost.getPostTextContent());
-        return existsPost;
+    public PostRs delete(Long id) {
+        final PostEntity entity = getEntity(id);
+        repository.delete(entity);
+        return mapper.toRsDto(entity);
     }
 
-    @DeleteMapping("/{id}")
-    public PostDTO delete(@PathVariable int id) {
-        log.debug("Delete student with id {}", id);
-        final PostDTO post = get(id);
-        posts.remove(post);
-        return post;
-    }
 }
