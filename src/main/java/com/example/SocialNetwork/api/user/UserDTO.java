@@ -1,9 +1,7 @@
-package com.example.SocialNetwork.api.User;
+package com.example.SocialNetwork.api.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class UserDTO {

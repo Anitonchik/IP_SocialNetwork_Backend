@@ -1,37 +1,13 @@
-package com.example.SocialNetwork.entity;
+package com.example.SocialNetwork.api.message;
 
 import java.util.Date;
-import java.util.List;
 
-public class MessageEntity extends BaseEntity{
-    private Long id;
+public class MessageRq {
     private Long chatId;
     private Long userId;
     private String messageText;
     private Date createdAt;
     private Boolean isEdited;
-    private List<String> attachments;
-
-    public MessageEntity() {super();}
-
-    public MessageEntity(Long id, Long chatId, Long userId, String messageText, Date createdAt,
-                      List<String> attachments) {
-        this.id = id;
-        this.chatId = chatId;
-        this.userId = userId;
-        this.messageText = messageText;
-        this.createdAt = createdAt;
-        this.attachments = attachments;
-        this.isEdited = false;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Long getChatId() {
         return chatId;
@@ -72,13 +48,4 @@ public class MessageEntity extends BaseEntity{
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-
-    public List<String> getAttachments() {
-        return attachments;
-    }
-
-    public void setAttachments(List<String> attachments) {
-        this.attachments = attachments;
-    }
-
 }

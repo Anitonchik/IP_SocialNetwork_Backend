@@ -1,4 +1,4 @@
-package com.example.SocialNetwork.api.Chat;
+package com.example.SocialNetwork.api.message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,19 +13,16 @@ public class MessageDTO {
     private String messageText;
     private Date createdAt;
     private Boolean isEdited;
-    private List<String> attachments;
 
     public MessageDTO() {
     }
 
-    public MessageDTO(int id, int chatId, int userId, String messageText, Date createdAt,
-                      List<String> attachments) {
+    public MessageDTO(int id, int chatId, int userId, String messageText, Date createdAt) {
         this.id = id;
         this.chatId = chatId;
         this.userId = userId;
         this.messageText = messageText;
         this.createdAt = createdAt;
-        this.attachments = attachments;
         this.isEdited = false;
     }
 
@@ -75,14 +72,6 @@ public class MessageDTO {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public List<String> getAttachments() {
-        return attachments;
-    }
-
-    public void setAttachments(List<String> attachments) {
-        this.attachments = attachments;
     }
 
 }

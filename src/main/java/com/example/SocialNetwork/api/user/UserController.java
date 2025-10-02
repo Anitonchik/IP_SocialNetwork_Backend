@@ -1,4 +1,4 @@
-package com.example.SocialNetwork.api.User;
+package com.example.SocialNetwork.api.user;
 
 import com.example.SocialNetwork.api.NotFoundException;
 import com.example.SocialNetwork.configuration.Constants;

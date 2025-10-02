@@ -1,8 +1,8 @@
-package com.example.SocialNetwork.api.Chat;
+package com.example.SocialNetwork.api.message;
 
 import com.example.SocialNetwork.api.NotFoundException;
-import com.example.SocialNetwork.api.User.UserController;
-import com.example.SocialNetwork.api.User.UserDTO;
+import com.example.SocialNetwork.api.user.UserController;
+import com.example.SocialNetwork.api.user.UserDTO;
 import com.example.SocialNetwork.configuration.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +25,13 @@ public class MessageController {
     public MessageController() {
         this.messages = new ArrayList<>(List.of(
                 new MessageDTO(idGenerator.incrementAndGet(), 1, 1, "blablabla",
-                        new Date(), new ArrayList<>()),
+                        new Date()),
                 new MessageDTO(idGenerator.incrementAndGet(), 1, 2, "dfgfg",
-                        new Date(), new ArrayList<>()),
+                        new Date()),
                 new MessageDTO(idGenerator.incrementAndGet(), 1, 2, "hehe",
-                        new Date(), new ArrayList<>()),
+                        new Date()),
                 new MessageDTO(idGenerator.incrementAndGet(), 1, 1, "sfg",
-                        new Date(), new ArrayList<>())));
+                        new Date())));
     }
 
     @GetMapping
@@ -69,7 +69,6 @@ public class MessageController {
         log.debug("Edit message with id {} and data {}", id, newMessage);
         final MessageDTO existsMessage = get(id);
         existsMessage.setMessageText(newMessage.getMessageText());
-        existsMessage.setAttachments(newMessage.getAttachments());
         existsMessage.setCreatedAt(newMessage.getCreatedAt());
         existsMessage.setIsEdited(true);
         return existsMessage;

@@ -1,6 +1,7 @@
 package com.example.SocialNetwork.repository;
 
 import com.example.SocialNetwork.entity.BaseEntity;
+import com.example.SocialNetwork.entity.UserEntity;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -12,7 +13,8 @@ public abstract class MapRepository<E extends BaseEntity> implements CommonRepos
     private final ConcurrentNavigableMap<Long, E> entities = new ConcurrentSkipListMap<>();
     private final AtomicLong idGenerator = new AtomicLong(0L);
 
-    protected MapRepository() {}
+    protected MapRepository() {
+    }
 
     private boolean isNew(E entity) {
         return Objects.isNull(entity.getId());

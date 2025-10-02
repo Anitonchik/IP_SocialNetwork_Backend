@@ -1,8 +1,9 @@
 package com.example.SocialNetwork.api.Chat;
 
 import com.example.SocialNetwork.api.NotFoundException;
-import com.example.SocialNetwork.api.User.UserController;
-import com.example.SocialNetwork.api.User.UserDTO;
+import com.example.SocialNetwork.api.message.MessageController;
+import com.example.SocialNetwork.api.user.UserController;
+import com.example.SocialNetwork.api.user.UserDTO;
 import com.example.SocialNetwork.configuration.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

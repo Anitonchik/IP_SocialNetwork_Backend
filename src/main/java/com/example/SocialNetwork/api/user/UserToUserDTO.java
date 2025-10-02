@@ -1,24 +1,21 @@
-package com.example.SocialNetwork.entity;
+package com.example.SocialNetwork.api.user;
 
-public class UserToUserEntity extends BaseEntity{
-    private Long id;
+public class UserToUserDTO {
+    private int id;
     private int userId;
     private int subscribedUserId;
-    private UserEntity user;
-    private UserEntity subscribedUser;
+    private UserDTO user;
+    private UserDTO subscribedUser;
 
-    public UserToUserEntity(){super();}
-
-    public UserToUserEntity (Long id, int userId, int subscribedUserId) {
-        this();
+    public UserToUserDTO (int id, int userId, int subscribedUserId) {
         this.id = id;
         this.userId = userId;
         this.subscribedUserId = subscribedUserId;
     }
 
-    public Long getId() {return id;}
+    public int getId() {return id;}
 
-    public void setId(Long id) {this.id = id;}
+    public void setId(int id) {this.id = id;}
 
     public int getUserId() {
         return userId;
@@ -36,19 +33,19 @@ public class UserToUserEntity extends BaseEntity{
         this.subscribedUserId = subscribedUserId;
     }
 
-    public UserEntity getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(UserEntity user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 
-    public UserEntity getSubscribedUser() {
+    public UserDTO getSubscribedUser() {
         return subscribedUser;
     }
 
-    public void setSubscribedUser(UserEntity subscribedUser) {
+    public void setSubscribedUser(UserDTO subscribedUser) {
         this.subscribedUser = subscribedUser;
     }
 }

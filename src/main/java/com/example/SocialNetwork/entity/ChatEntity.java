@@ -1,8 +1,6 @@
 package com.example.SocialNetwork.entity;
 
-import com.example.SocialNetwork.api.Chat.MessageDTO;
-import com.example.SocialNetwork.api.User.UserDTO;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.example.SocialNetwork.api.user.UserDTO;
 
 import java.util.Date;
 import java.util.List;
@@ -11,12 +9,12 @@ public class ChatEntity extends BaseEntity{
     private Long id;
     private UserDTO chatUser;
     private Date createdAt;
-    private List<Integer> participants;
+    private List<UserEntity> participants;
     private List<MessageEntity> messages;
 
     public ChatEntity() {super();}
 
-    public ChatEntity(Long id, Date createdAt, List<Integer> participants) {
+    public ChatEntity(Long id, Date createdAt, List<UserEntity> participants) {
         this();
         this.id = id;
         this.createdAt = createdAt;
@@ -47,11 +45,11 @@ public class ChatEntity extends BaseEntity{
         this.createdAt = createdAt;
     }
 
-    public List<Integer> getParticipants() {
+    public List<UserEntity> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<Integer> participants) {
+    public void setParticipants(List<UserEntity> participants) {
         this.participants = participants;
     }
 

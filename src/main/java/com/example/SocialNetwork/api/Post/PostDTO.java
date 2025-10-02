@@ -1,6 +1,6 @@
 package com.example.SocialNetwork.api.Post;
 
-import com.example.SocialNetwork.api.User.UserDTO;
+import com.example.SocialNetwork.api.user.UserDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PostDTO {

@@ -1,6 +1,7 @@
 package com.example.SocialNetwork.api.Chat;
 
-import com.example.SocialNetwork.api.User.UserDTO;
+import com.example.SocialNetwork.api.message.MessageDTO;
+import com.example.SocialNetwork.api.user.UserDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;

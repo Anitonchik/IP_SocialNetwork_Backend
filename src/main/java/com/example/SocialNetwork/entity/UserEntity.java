@@ -3,7 +3,6 @@ package com.example.SocialNetwork.entity;
 import java.util.List;
 
 public class UserEntity extends BaseEntity{
-    private Long id;
     private String firstName;
     private String lastName;
     private String userName;
@@ -11,16 +10,15 @@ public class UserEntity extends BaseEntity{
     private String userDescription;
     private String pageAddress;
     private int publications;
-    private List<UserToUserEntity> followers;
-    private List<UserToUserEntity> subscriptions;
+    private List<UserEntity> followers;
+    private List<UserEntity> subscriptions;
     private String phone;
 
     public UserEntity(){super();}
 
-    public UserEntity (Long id, String firstName, String lastName, String userName, String userAvatarURL,
+    public UserEntity (String firstName, String lastName, String userName, String userAvatarURL,
                     String userDescription, String pageAddress, String phone) {
         this();
-        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
@@ -93,19 +91,19 @@ public class UserEntity extends BaseEntity{
         this.publications = publications;
     }
 
-    public List<UserToUserEntity> getFollowers() {
+    public List<UserEntity> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(List<UserToUserEntity> followers) {
+    public void setFollowers(List<UserEntity> followers) {
         this.followers = followers;
     }
 
-    public List<UserToUserEntity> getSubscriptions() {
+    public List<UserEntity> getSubscriptions() {
         return subscriptions;
     }
 
-    public void setSubscriptions(List<UserToUserEntity> subscriptions) {
+    public void setSubscriptions(List<UserEntity> subscriptions) {
         this.subscriptions = subscriptions;
     }
 
@@ -115,5 +113,15 @@ public class UserEntity extends BaseEntity{
 
     public void setUserDescription(String userDescription) {
         this.userDescription = userDescription;
+    }
+
+
+
+    public void setFollower(UserEntity follower) {
+        this.followers.add(follower);
+    }
+
+    public void setSubscription(UserEntity subscription) {
+        this.subscriptions.add(subscription);
     }
 }
