@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 public class ChatEntity extends BaseEntity{
-    private UserEntity chatUser;
     private Date createdAt;
     private List<UserEntity> participants;
     private List<MessageEntity> messages;
@@ -18,15 +17,6 @@ public class ChatEntity extends BaseEntity{
         this.createdAt = createdAt;
         this.participants = participants;
         this.messages = messages;
-    }
-
-
-    public UserEntity getUser() {
-        return chatUser;
-    }
-
-    public void setUser(UserEntity chatUser) {
-        this.chatUser = chatUser;
     }
 
     public Date getCreatedAt() {

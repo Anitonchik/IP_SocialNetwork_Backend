@@ -9,7 +9,6 @@ public class MessageDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int id;
     private int chatId;
-    private int userId;
     private String messageText;
     private Date createdAt;
     private Boolean isEdited;
@@ -17,10 +16,9 @@ public class MessageDTO {
     public MessageDTO() {
     }
 
-    public MessageDTO(int id, int chatId, int userId, String messageText, Date createdAt) {
+    public MessageDTO(int id, int chatId, String messageText, Date createdAt) {
         this.id = id;
         this.chatId = chatId;
-        this.userId = userId;
         this.messageText = messageText;
         this.createdAt = createdAt;
         this.isEdited = false;
@@ -40,14 +38,6 @@ public class MessageDTO {
 
     public void setChatId(int chatId) {
         this.chatId = chatId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getMessageText() {

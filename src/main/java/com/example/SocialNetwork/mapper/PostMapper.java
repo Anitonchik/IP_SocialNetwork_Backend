@@ -15,9 +15,9 @@ public class PostMapper {
 
     public PostMapper(UserMapper userMapper) { this.userMapper = userMapper; }
 
-    public PostRq toRgDto(UserRq user, String postImageURL, String postTextContent) {
+    public PostRq toRqDto(Long userId, String postImageURL, String postTextContent) {
         final PostRq dto = new PostRq();
-        dto.setUser(user);
+        dto.setUserId(userId);
         dto.setPostImageURL(postImageURL);
         dto.setPostTextContent(postTextContent);
         return dto;
@@ -26,6 +26,7 @@ public class PostMapper {
     public PostRs toRsDto(PostEntity postEntity){
         final PostRs dto = new PostRs();
         var userRs = userMapper.toRsDto(postEntity.getUser());
+        dto.setId(postEntity.getId());
         dto.setUser(userRs);
         dto.setPostImageURL(postEntity.getPostImageURL());
         dto.setPostTextContent(postEntity.getPostTextContent());

@@ -7,7 +7,7 @@ public class MessageRq {
     private Long userId;
     private String messageText;
     private Date createdAt;
-    private Boolean isEdited;
+    private Boolean isEdited = false;
 
     public Long getChatId() {
         return chatId;

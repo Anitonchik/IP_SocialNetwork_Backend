@@ -38,11 +38,19 @@ configurations {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation "org.springframework.boot:spring-boot-starter-web"
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
+	testImplementation 'junit:junit:4.13.2'
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+
+	testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+	mockitoAgent("org.mockito:mockito-core:${mockitoVersion}") {
+		transitive = false
+	}
+
 }
 
 tasks.named("test") {

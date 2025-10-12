@@ -10,7 +10,6 @@ import java.util.List;
 public class ChatDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int id;
-    private UserDTO chatUser;
     private Date createdAt;
     private List<Integer> participants;
     private List<MessageDTO> messages;
@@ -30,14 +29,6 @@ public class ChatDTO {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public UserDTO getUser() {
-        return chatUser;
-    }
-
-    public void setUser(UserDTO chatUser) {
-        this.chatUser = chatUser;
     }
 
     public Date getCreatedAt() {

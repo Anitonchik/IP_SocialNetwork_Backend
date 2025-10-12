@@ -24,10 +24,11 @@ public class ChatMapper {
         this.messageMapper = messageMapper;
     }
 
-    public ChatRq toRgDto(Date createdAt, List<Long> participants) {
+    public ChatRq toRqDto(Date createdAt, List<Long> participants) {
         final ChatRq dto = new ChatRq();
         dto.setCreatedAt(createdAt);
         dto.setParticipants(participants);
+
         return dto;
     }
 
@@ -39,12 +40,14 @@ public class ChatMapper {
         }
 
         List<MessageRs> messages = new ArrayList<>();
-        for (int i = 0; i < chatEntity.getMessages().size(); i++) {
+
+        for (int i = 0; i < ((chatEntity.getMessages() != null) ? chatEntity.getMessages().size() : 0); i++) {
             var message = chatEntity.getMessages().get(i);
             messages.add(messageMapper.toRsDto(message));
         }
 
         final ChatRs dto = new ChatRs();
+        dto.setId(chatEntity.getId());
         dto.setCreatedAt(chatEntity.getCreatedAt());
         dto.setParticipants(users);
         dto.setMessages(messages);

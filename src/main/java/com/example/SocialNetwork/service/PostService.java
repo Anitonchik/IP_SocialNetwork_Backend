@@ -20,11 +20,12 @@ import java.util.List;
 public class PostService {
     private final PostRepository repository;
     private final UserService typeService;
-    private PostMapper mapper;
+    private final PostMapper mapper;
 
-    public PostService(PostRepository repository, UserService typeService) {
+    public PostService(PostRepository repository, UserService typeService, PostMapper mapper) {
         this.repository = repository;
         this.typeService = typeService;
+        this.mapper = mapper;
     }
 
     public PostEntity getEntity(Long id) {

@@ -11,12 +11,11 @@ import java.util.stream.StreamSupport;
 
 @Component
 public class MessageMapper {
-    public MessageRq toRgDto(Long chatId, Long userId, String messageText, Boolean isEdited, Date createdAt) {
+    public MessageRq toRqDto(Long chatId, Long userId, String messageText, Date createdAt) {
         final MessageRq dto = new MessageRq();
         dto.setChatId(chatId);
         dto.setUserId(userId);
         dto.setMessageText(messageText);
-        dto.setIsEdited(isEdited);
         dto.setCreatedAt(createdAt);
         return dto;
     }
@@ -25,7 +24,6 @@ public class MessageMapper {
         final MessageRs dto = new MessageRs();
         dto.setId(messageEntity.getId());
         dto.setChatId(messageEntity.getChatId());
-        dto.setUserId(messageEntity.getUserId());
         dto.setMessageText(messageEntity.getMessageText());
         dto.setIsEdited(messageEntity.getIsEdited());
         dto.setCreatedAt(messageEntity.getCreatedAt());
