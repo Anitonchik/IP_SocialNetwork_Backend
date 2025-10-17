@@ -18,6 +18,7 @@ bootJar {
 	archiveFileName = String.format("%s-%s.jar", rootProject.name, version)
 }
 
+//assert System.properties["java.specification.version"] == jdkVersion
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
@@ -30,6 +31,7 @@ repositories {
 
 ext {
 	springdocVersion = "2.8.11"
+	h2Version = "2.4.240"
 	mockitoVersion = "5.19.0"
 }
 
@@ -39,18 +41,19 @@ configurations {
 
 dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-web"
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation "org.springframework.boot:spring-boot-starter-validation"
 	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
 
-	testImplementation('org.springframework.boot:spring-boot-starter-test')
-	testImplementation 'junit:junit:4.13.2'
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+	implementation "com.h2database:h2:${h2Version}"
+
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
 	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 
 	testImplementation "org.mockito:mockito-core:${mockitoVersion}"
 	mockitoAgent("org.mockito:mockito-core:${mockitoVersion}") {
 		transitive = false
 	}
-
 }
 
 tasks.named("test") {

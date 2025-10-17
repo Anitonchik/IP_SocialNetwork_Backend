@@ -1,10 +1,17 @@
 package com.example.SocialNetwork.api.Chat;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.util.Date;
 import java.util.List;
 
 public class ChatRq {
+    @NotNull
     private Date createdAt;
+    @NotEmpty
+    @Size(min = 2, max = 2, message = "There must be 2 chat participants")
     private List<Long> participants;
 
     public Date getCreatedAt() {
