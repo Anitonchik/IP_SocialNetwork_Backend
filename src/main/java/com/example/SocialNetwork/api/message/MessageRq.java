@@ -1,11 +1,18 @@
 package com.example.SocialNetwork.api.message;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Date;
 
 public class MessageRq {
+    @NotNull
     private Long chatId;
+    @NotNull
     private Long userId;
+    @NotBlank
     private String messageText;
+    @NotNull
     private Date createdAt;
     private Boolean isEdited = false;
 
