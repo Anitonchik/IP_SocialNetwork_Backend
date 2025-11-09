@@ -1,18 +1,44 @@
 package com.example.SocialNetwork.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+
 import java.util.List;
 
 public class UserEntity extends BaseEntity{
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false)
     private String userName;
+    @Column(nullable = false)
     private String userAvatarURL;
+    @Column(nullable = false)
     private String userDescription;
+    @Column(nullable = false)
     private String pageAddress;
-    private int publications;
-    private List<UserEntity> followers;
-    private List<UserEntity> subscriptions;
+    @Column(nullable = false)
     private String phone;
+
+    @ManyToMany
+    @JoinTable(
+            name = "Subscriptions",
+            joinColumns = @JoinColumn(name = "UserId"),
+            inverseJoinColumns = @JoinColumn(name = "SubscribedUserId")
+    )
+    private List<UserEntity> followers;
+    @ManyToMany
+    @JoinTable(
+            name = "Subscriptions",
+            joinColumns = @JoinColumn(name = "SubscribedUserId"),
+            inverseJoinColumns = @JoinColumn(name = "UserId")
+    )
+    private List<UserEntity> subscriptions;
+
+    private int publications;
 
     public UserEntity(){super();}
 

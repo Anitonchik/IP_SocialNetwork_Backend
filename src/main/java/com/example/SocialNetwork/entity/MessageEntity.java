@@ -1,20 +1,32 @@
 package com.example.SocialNetwork.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
 import java.util.Date;
 import java.util.List;
 
 public class MessageEntity extends BaseEntity{
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chat_id", nullable = false)
     private Long chatId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private Long userId;
+    @Column(length = 4096, nullable = false)
     private String messageText;
+    @Column(nullable = false)
     private Date createdAt;
+    @Column(nullable = false)
     private Boolean isEdited;
 
     public MessageEntity() {super();}
 
     public MessageEntity(Long chatId, Long userId, String messageText, Date createdAt) {
         this.chatId = chatId;
-        this.userId = userId;
         this.messageText = messageText;
         this.createdAt = createdAt;
         this.isEdited = false;

@@ -1,13 +1,20 @@
 package com.example.SocialNetwork.entity;
 
 import com.example.SocialNetwork.api.user.UserDTO;
+import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.List;
 
+@Entity
+@Table(name = "chats")
 public class ChatEntity extends BaseEntity{
+    @Column(nullable = false)
     private Date createdAt;
+    @OneToMany(mappedBy = "users")
     private List<UserEntity> participants;
+    @OneToMany(mappedBy = "messages")
+    @OrderBy("createdAt ASC")
     private List<MessageEntity> messages;
 
     public ChatEntity() {super();}
