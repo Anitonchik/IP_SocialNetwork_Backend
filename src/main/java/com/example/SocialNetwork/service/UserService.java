@@ -4,8 +4,10 @@ import com.example.SocialNetwork.api.NotFoundException;
 import com.example.SocialNetwork.api.user.UserRq;
 import com.example.SocialNetwork.api.user.UserRs;
 import com.example.SocialNetwork.entity.UserEntity;
-import com.example.SocialNetwork.mapper.UserMapper;
+import com.example.SocialNetwork.error.AlreadyExistsException;
 import com.example.SocialNetwork.repository.UserRepository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,52 +15,62 @@ import java.util.List;
 @Service
 public class UserService {
     final private UserRepository repository;
-    private final UserMapper mapper;
 
-    public UserService(UserRepository repository, UserMapper userMapper) {
+    public UserService(UserRepository repository) {
         this.repository = repository;
-        this.mapper = userMapper;
     }
 
+    private void checkUserNameAndPhone(String name, String phone) {
+        repository.findByUserName(name).ifPresent(val -> {
+            throw new AlreadyExistsException(UserEntity.class, name);
+        });
+        repository.findByPhone(phone).ifPresent(val -> {
+            throw new AlreadyExistsException(UserEntity.class, name);
+        });
+    }
+
+    @Transactional(propagation = Propagation.MANDATORY)
     public UserEntity getEntity(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(UserEntity.class, id));
     }
 
-    public List<UserRs> getAll() {
-        return mapper.toRsListDto(repository.findAll());
-    }
+    @Transactional(readOnly = true)
+    public List<UserRs> getAll() {return UserRs.fromList(repository.findAll());}
 
+    @Transactional(readOnly = true)
     public UserRs get(Long id) {
         final UserEntity entity = getEntity(id);
-        return mapper.toRsDto(entity);
+        return UserRs.from(entity);
     }
 
+    @Transactional
     public UserRs create(UserRq dto) {
-        UserEntity entity = new UserEntity(dto.getFirstName(), dto.getLastName(),
-                dto.getUserName(), dto.getUserAvatarURL(), dto.getUserDescription(),
-                "http://" + dto.getUserName(), dto.getPhone());
+        checkUserNameAndPhone(dto.userName(), dto.phone());
+        UserEntity entity = new UserEntity(dto.firstName(), dto.lastName(),
+                dto.userName(), dto.userAvatarURL(), dto.userDescription(),
+                "http://" + dto.userName(), dto.phone());
         entity = repository.save(entity);
-        return mapper.toRsDto(entity);
+        return UserRs.from(entity);
     }
 
     public UserRs update(Long id, UserRq dto) {
+        checkUserNameAndPhone(dto.userName(), dto.phone());
         UserEntity entity = getEntity(id);
-        entity.setFirstName(dto.getFirstName());
-        entity.setLastName(dto.getLastName());
-        entity.setUserName(dto.getUserName());
-        entity.setUserAvatarURL(dto.getUserAvatarURL());
-        entity.setUserDescription(dto.getUserDescription());
-        entity.setPhone(dto.getPhone());
+        entity.setFirstName(dto.firstName());
+        entity.setLastName(dto.lastName());
+        entity.setUserName(dto.userName());
+        entity.setUserAvatarURL(dto.userAvatarURL());
+        entity.setUserDescription(dto.userDescription());
+        entity.setPhone(dto.phone());
         entity = repository.save(entity);
-        return mapper.toRsDto(entity);
+        return UserRs.from(entity);
     }
 
     public UserRs delete(Long id) {
         final UserEntity entity = getEntity(id);
         repository.delete(entity);
-        return mapper.toRsDto(entity);
+        return UserRs.from(entity);
     }
-
 
 }

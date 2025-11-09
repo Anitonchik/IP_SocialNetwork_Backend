@@ -12,15 +12,15 @@ public class UserEntity extends BaseEntity{
     private String firstName;
     @Column(nullable = false)
     private String lastName;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String userName;
     @Column(nullable = false)
     private String userAvatarURL;
     @Column(nullable = false)
     private String userDescription;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String pageAddress;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String phone;
 
     @ManyToMany

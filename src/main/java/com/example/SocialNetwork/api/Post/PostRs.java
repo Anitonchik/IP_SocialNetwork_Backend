@@ -2,39 +2,21 @@ package com.example.SocialNetwork.api.Post;
 
 import com.example.SocialNetwork.api.user.UserRq;
 import com.example.SocialNetwork.api.user.UserRs;
+import com.example.SocialNetwork.entity.PostEntity;
 import jakarta.validation.constraints.NotNull;
 
-public class PostRs {
-    private Long id;
-    @NotNull
-    private UserRs user;
-    private String postImageURL;
-    private String postTextContent;
+import java.util.List;
+import java.util.stream.StreamSupport;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+public record PostRs (Long id, UserRs user, String postImageURL, String postTextContent) {
 
-    public UserRs getUser() {
-        return user;
+    public static PostRs from(PostEntity post) {
+        return new PostRs(post.getId(), UserRs.from(post.getUser()), post.getPostImageURL(), post.getPostTextContent());
     }
 
-    public void setUser(UserRs user) {
-        this.user = user;
-    }
-
-    public String getPostImageURL() {
-        return postImageURL;
-    }
-
-    public void setPostImageURL(String postImageURL) {
-        this.postImageURL = postImageURL;
-    }
-
-    public String getPostTextContent() {
-        return postTextContent;
-    }
-
-    public void setPostTextContent(String postTextContent) {
-        this.postTextContent = postTextContent;
+    public static List<PostRs> fromList(Iterable<PostEntity> entities) {
+        return StreamSupport.stream(entities.spliterator(), false)
+                .map(PostRs::from)
+                .toList();
     }
 }

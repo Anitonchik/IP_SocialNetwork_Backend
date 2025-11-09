@@ -1,45 +1,26 @@
 package com.example.SocialNetwork.api.Chat;
 
 import com.example.SocialNetwork.api.message.MessageRs;
+import com.example.SocialNetwork.api.user.UserRq;
 import com.example.SocialNetwork.api.user.UserRs;
+import com.example.SocialNetwork.entity.ChatEntity;
+import com.example.SocialNetwork.entity.MessageEntity;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
-public class ChatRs {
-    private Long id;
-    private Date createdAt;
-    private List<UserRs> participants;
-    private List<MessageRs> messages;
+public record ChatRs (Long id, UserRs firstUser, UserRs secondUser, Date createdAt, List<MessageRs> messages){
 
-    public Long getId() {
-        return id;
+    public static ChatRs from(ChatEntity chat) {
+        return new ChatRs(chat.getId(), UserRs.from(chat.getFirstUser()), UserRs.from(chat.getSecondUser()),
+                chat.getCreatedAt(), MessageRs.fromList(chat.getMessages()));
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public List<UserRs> getParticipants() {
-        return participants;
-    }
-
-    public void setParticipants(List<UserRs> participants) {
-        this.participants = participants;
-    }
-
-    public List<MessageRs> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<MessageRs> messages) {
-        this.messages = messages;
+    public static List<ChatRs> fromList(Iterable<ChatEntity> entities) {
+        return StreamSupport.stream(entities.spliterator(), false)
+                .map(ChatRs::from)
+                .toList();
     }
 }
+

@@ -1,60 +1,21 @@
 package com.example.SocialNetwork.api.message;
 
+import com.example.SocialNetwork.entity.MessageEntity;
+
 import java.util.Date;
+import java.util.List;
+import java.util.stream.StreamSupport;
 
-public class MessageRs {
-    private Long id;
-    private Long chatId;
-    private Long userId;
-    private String messageText;
-    private Date createdAt;
-    private Boolean isEdited;
-
-    public Long getId() {
-        return id;
+public record MessageRs (Long id, Long chatId, Long userId, String messageText, Date createdAt, Boolean isEdited) {
+    public static MessageRs from(MessageEntity message) {
+        return new MessageRs(message.getId(), message.getChatId(), message.getUserId(), message.getMessageText(),
+                message.getCreatedAt(), message.getIsEdited());
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public static List<MessageRs> fromList(Iterable<MessageEntity> entities) {
+        return StreamSupport.stream(entities.spliterator(), false)
+                .map(MessageRs::from)
+                .toList();
     }
 
-    public Long getChatId() {
-        return chatId;
-    }
-
-    public void setChatId(Long chatId) {
-        this.chatId = chatId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getMessageText() {
-        return messageText;
-    }
-
-    public void setMessageText(String messageText) {
-        this.messageText = messageText;
-    }
-
-    public Boolean getIsEdited() {
-        return isEdited;
-    }
-
-    public void setIsEdited(Boolean isEdited) {
-        this.isEdited = isEdited;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
 }

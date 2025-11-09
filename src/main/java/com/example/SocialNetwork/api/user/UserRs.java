@@ -1,75 +1,21 @@
 package com.example.SocialNetwork.api.user;
 
+import com.example.SocialNetwork.entity.UserEntity;
 import jakarta.validation.constraints.NotBlank;
 
-public class UserRs {
-    private Long id;
-    @NotBlank
-    private String firstName;
-    @NotBlank
-    private String lastName;
-    @NotBlank
-    private String userName;
-    private String userAvatarURL;
-    private String userDescription;
-    private int publications;
-    private String phone;
+import java.util.List;
+import java.util.stream.StreamSupport;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getFirstName() {
-        return firstName;
+public record UserRs (Long id, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String userName,
+                      String userAvatarURL, String userDescription, int publications, String phone) {
+    public static UserRs from(UserEntity entity) {
+        return new UserRs(entity.getId(), entity.getFirstName(), entity.getLastName(), entity.getUserName(),
+                entity.getUserAvatarURL(), entity.getUserDescription(), entity.getPublications(), entity.getPhone());
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserAvatarURL() {
-        return userAvatarURL;
-    }
-
-    public void setUserAvatarURL(String userAvatarURL) {
-        this.userAvatarURL = userAvatarURL;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public int getPublications() {
-        return publications;
-    }
-
-    public void setPublications(int publications) {
-        this.publications = publications;
-    }
-
-    public String getUserDescription() {
-        return userDescription;
-    }
-
-    public void setUserDescription(String userDescription) {
-        this.userDescription = userDescription;
+    public static List<UserRs> fromList(Iterable<UserEntity> entities) {
+        return StreamSupport.stream(entities.spliterator(), false)
+                .map(UserRs::from)
+                .toList();
     }
 }

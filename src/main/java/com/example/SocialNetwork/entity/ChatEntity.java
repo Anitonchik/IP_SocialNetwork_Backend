@@ -7,22 +7,36 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "chats")
+@Table(
+    name = "chats",
+    uniqueConstraints = {
+        @UniqueConstraint(
+                columnNames = {"first_user_id", "second_user_id"},
+                name = "id_chat_users_pair"
+        )
+    }
+)
 public class ChatEntity extends BaseEntity{
     @Column(nullable = false)
     private Date createdAt;
-    @OneToMany(mappedBy = "users")
-    private List<UserEntity> participants;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "first_user_id", nullable = false)
+    private UserEntity firstUser;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "second_user_id", nullable = false)
+    private UserEntity secondUser;
     @OneToMany(mappedBy = "messages")
     @OrderBy("createdAt ASC")
     private List<MessageEntity> messages;
 
     public ChatEntity() {super();}
 
-    public ChatEntity(Date createdAt, List<UserEntity> participants, List<MessageEntity> messages) {
+    public ChatEntity(Date createdAt, UserEntity firstUser, UserEntity secondUser, List<MessageEntity> messages) {
         this();
         this.createdAt = createdAt;
-        this.participants = participants;
+        this.firstUser = firstUser;
+        this.secondUser = secondUser;
         this.messages = messages;
     }
 
@@ -34,13 +48,13 @@ public class ChatEntity extends BaseEntity{
         this.createdAt = createdAt;
     }
 
-    public List<UserEntity> getParticipants() {
-        return participants;
-    }
+    public UserEntity getFirstUser() { return firstUser; }
 
-    public void setParticipants(List<UserEntity> participants) {
-        this.participants = participants;
-    }
+    public void setFirstUser(UserEntity firstUser) { this.firstUser = firstUser; }
+
+    public UserEntity getSecondUser() { return secondUser; }
+
+    public void setSecondUser(UserEntity secondUser) { this.secondUser = secondUser; }
 
     public List<MessageEntity> getMessages() {
         return messages;
@@ -49,4 +63,15 @@ public class ChatEntity extends BaseEntity{
     public void setMessages(List<MessageEntity> messages) {
         this.messages = messages;
     }
+
+    @PrePersist
+    @PreUpdate
+    public void normalizeUsers() {
+        if (firstUser.id > secondUser.id) {
+            UserEntity temp = firstUser;
+            firstUser = secondUser;
+            secondUser = temp;
+        }
+    }
+
 }

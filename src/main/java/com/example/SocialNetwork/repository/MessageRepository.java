@@ -1,8 +1,13 @@
 package com.example.SocialNetwork.repository;
 
 import com.example.SocialNetwork.entity.MessageEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public class MessageRepository extends MapRepository<MessageEntity> {
+import java.util.List;
+import java.util.Optional;
+
+
+public interface MessageRepository extends JpaRepository<MessageEntity, Long> {
+    List<MessageEntity> findByChatId(Long chatId);
 }

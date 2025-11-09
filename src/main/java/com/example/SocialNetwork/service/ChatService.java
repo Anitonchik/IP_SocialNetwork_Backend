@@ -3,16 +3,20 @@ package com.example.SocialNetwork.service;
 import com.example.SocialNetwork.api.Chat.ChatRq;
 import com.example.SocialNetwork.api.Chat.ChatRs;
 import com.example.SocialNetwork.api.NotFoundException;
-import com.example.SocialNetwork.api.message.MessageRs;
+import com.example.SocialNetwork.api.user.UserRs;
 import com.example.SocialNetwork.entity.ChatEntity;
 import com.example.SocialNetwork.entity.PostEntity;
 import com.example.SocialNetwork.entity.UserEntity;
-import com.example.SocialNetwork.mapper.ChatMapper;
+import com.example.SocialNetwork.error.AlreadyExistsException;
 import com.example.SocialNetwork.repository.ChatRepository;
+import org.hibernate.dialect.unique.CreateTableUniqueDelegate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,49 +24,69 @@ public class ChatService {
     private final ChatRepository repository;
     private final UserService userService;
     private final MessageService messageService;
-    private final ChatMapper mapper;
 
 
-    public ChatService(ChatRepository repository, UserService userService, MessageService messageService, ChatMapper mapper) {
+    public ChatService(ChatRepository repository, UserService userService, MessageService messageService) {
         this.repository = repository;
         this.userService = userService;
         this.messageService = messageService;
-        this.mapper = mapper;
     }
 
+    private void checkUsers(Long firstUserId, Long secondUserId) {
+        repository.findChatByUsers(firstUserId, secondUserId).ifPresent(val -> {
+            throw new AlreadyExistsException(ChatEntity.class, firstUserId, secondUserId);
+        });
+    }
+
+    @Transactional(propagation = Propagation.MANDATORY)
     public ChatEntity getEntity(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(PostEntity.class, id));
     }
 
+    @Transactional(readOnly = true)
     public List<ChatRs> getAll() {
-        return mapper.toRsListDto(repository.findAll());
+        return ChatRs.fromList(repository.findAll());
     }
 
+    @Transactional(readOnly = true)
     public ChatRs get(Long id) {
         final ChatEntity entity = getEntity(id);
-        return mapper.toRsDto(entity);
+        return ChatRs.from(entity);
     }
 
-    public ChatRs create(ChatRq dto) {
-        ChatEntity chatEntity = new ChatEntity();
-        chatEntity.setCreatedAt(dto.getCreatedAt());
-        chatEntity.setMessages(new ArrayList<>());
+    @Transactional(readOnly = true)
+    public List<ChatRs> getByUser(Long userId) {
+        return ChatRs.fromList(repository.findUsersChats(userId));
+    }
 
-        if (dto.getParticipants() != null) {
-            List<UserEntity> participants = dto.getParticipants().stream()
-                    .map(userService::getEntity)
-                    .collect(Collectors.toList());
-            chatEntity.setParticipants(participants);
-        }
+    @Transactional(readOnly = true)
+    public ChatRs getByUsers(Long firstUserId, Long secondUserId) {
+        return ChatRs.from(
+                repository.findChatByUsers(firstUserId, secondUserId)
+                        .orElseThrow(() -> new RuntimeException("Чат между пользователями не найден"))
+        );
+    }
+
+    @Transactional
+    public ChatRs create(ChatRq dto) {
+        final UserEntity firstUser = userService.getEntity(dto.firstUserId());
+        final UserEntity secondUser = userService.getEntity(dto.secondUserId());
+        checkUsers(dto.firstUserId(), dto.secondUserId());
+        ChatEntity chatEntity = new ChatEntity();
+        chatEntity.setFirstUser(firstUser);
+        chatEntity.setFirstUser(secondUser);
+        chatEntity.setCreatedAt(dto.createdAt());
+        //chatEntity.setMessages(new ArrayList<>());
 
         chatEntity = repository.save(chatEntity);
-        return mapper.toRsDto(chatEntity);
+        return ChatRs.from(chatEntity);
     }
 
+    @Transactional
     public ChatRs delete(Long id) {
         final ChatEntity entity = getEntity(id);
         repository.delete(entity);
-        return mapper.toRsDto(entity);
+        return ChatRs.from(entity);
     }
 }

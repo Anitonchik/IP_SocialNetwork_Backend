@@ -39,6 +39,12 @@ public class ChatController {
         return chatService.get(id);
     }
 
+    @GetMapping("/userschats/{userId}")
+    public List<ChatRs> getChatsByUser(@PathVariable Long userId) {return chatService.getByUser(userId);}
+
+    @GetMapping("/{userId}/{subscribedUserId}")
+    public ChatRs get(@PathVariable Long userId, @PathVariable Long subscribedUserId) {return chatService.getByUsers(userId, subscribedUserId);}
+
     @PostMapping
     public ChatRs create(@RequestBody @Valid ChatRq dto) {
         return chatService.create(dto);

@@ -36,6 +36,12 @@ public class PostController {
         return postService.get(id);
     }
 
+    @GetMapping("/usersPosts/{userId}")
+    public List<PostRs> getPostsByUser(@PathVariable Long userId) {return postService.getByUser(userId);}
+
+    @GetMapping("/notUsersPosts/{userId}")
+    public List<PostRs> getPostsByNotUser(@PathVariable Long userId) {return postService.getNotByUser(userId);}
+
     @PostMapping
     public PostRs create(@RequestBody @Valid PostRq dto) {
         return postService.create(dto);

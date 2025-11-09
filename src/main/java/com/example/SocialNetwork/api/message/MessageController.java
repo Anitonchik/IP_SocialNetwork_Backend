@@ -40,6 +40,9 @@ public class MessageController {
         return messageService.get(id);
     }
 
+    @GetMapping("/fromChat/{chatId}")
+    public List<MessageRs> getMessagesByChat(@PathVariable Long chatId) {return messageService.getByChat(chatId);}
+
     @PostMapping
     public MessageRs create(@RequestBody @Valid MessageRq dto) {
         return messageService.create(dto);

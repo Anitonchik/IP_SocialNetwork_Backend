@@ -1,71 +1,77 @@
 package com.example.SocialNetwork.service;
 
 import com.example.SocialNetwork.api.NotFoundException;
-import com.example.SocialNetwork.api.Post.PostDTO;
 import com.example.SocialNetwork.api.Post.PostRq;
 import com.example.SocialNetwork.api.Post.PostRs;
 import com.example.SocialNetwork.entity.PostEntity;
 import com.example.SocialNetwork.entity.UserEntity;
-import com.example.SocialNetwork.mapper.PostMapper;
 import com.example.SocialNetwork.repository.PostRepository;
-import com.example.SocialNetwork.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class PostService {
     private final PostRepository repository;
     private final UserService typeService;
-    private final PostMapper mapper;
 
-    public PostService(PostRepository repository, UserService typeService, PostMapper mapper) {
+    public PostService(PostRepository repository, UserService typeService) {
         this.repository = repository;
         this.typeService = typeService;
-        this.mapper = mapper;
     }
 
+
+    @Transactional(propagation = Propagation.MANDATORY)
     public PostEntity getEntity(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(PostEntity.class, id));
     }
 
+    @Transactional(readOnly = true)
     public List<PostRs> getAll() {
-        return mapper.toRsListDto(repository.findAll());
+        return PostRs.fromList(repository.findAll());
     }
 
+    @Transactional(readOnly = true)
     public PostRs get(Long id) {
         final PostEntity entity = getEntity(id);
-        return mapper.toRsDto(entity);
+        return PostRs.from(entity);
     }
 
+    @Transactional(readOnly = true)
+    public List<PostRs> getByUser(Long userId) {return PostRs.fromList(repository.findByUser_Id(userId));}
+
+    @Transactional(readOnly = true)
+    public List<PostRs> getNotByUser(Long userId) {
+        return PostRs.fromList(repository.findByUser_IdNot(userId));
+    }
+
+    @Transactional
     public PostRs create(PostRq dto) {
-        final UserEntity user = typeService.getEntity(dto.getUserId());
-        PostEntity entity = new PostEntity(
-                user,
-                dto.getPostImageURL(),
-                dto.getPostTextContent());
+        final UserEntity user = typeService.getEntity(dto.userId());
+        PostEntity entity = new PostEntity(user, dto.postImageURL(), dto.postTextContent());
         entity = repository.save(entity);
-        return mapper.toRsDto(entity);
+        return PostRs.from(entity);
     }
 
+    @Transactional
     public PostRs update(Long id, PostRq dto) {
         PostEntity entity = getEntity(id);
 
-        entity.setUser(typeService.getEntity(dto.getUserId()));
-        entity.setPostImageURL(dto.getPostImageURL());
-        entity.setPostTextContent(dto.getPostTextContent());
+        entity.setUser(typeService.getEntity(dto.userId()));
+        entity.setPostImageURL(dto.postImageURL());
+        entity.setPostTextContent(dto.postTextContent());
         entity = repository.save(entity);
-        return mapper.toRsDto(entity);
+        return PostRs.from(entity);
     }
 
+    @Transactional
     public PostRs delete(Long id) {
         final PostEntity entity = getEntity(id);
         repository.delete(entity);
-        return mapper.toRsDto(entity);
+        return PostRs.from(entity);
     }
 
 }
