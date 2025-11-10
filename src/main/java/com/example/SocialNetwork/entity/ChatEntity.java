@@ -1,6 +1,5 @@
 package com.example.SocialNetwork.entity;
 
-import com.example.SocialNetwork.api.user.UserDTO;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -26,7 +25,7 @@ public class ChatEntity extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "second_user_id", nullable = false)
     private UserEntity secondUser;
-    @OneToMany(mappedBy = "messages")
+    @OneToMany(mappedBy = "chat")
     @OrderBy("createdAt ASC")
     private List<MessageEntity> messages;
 

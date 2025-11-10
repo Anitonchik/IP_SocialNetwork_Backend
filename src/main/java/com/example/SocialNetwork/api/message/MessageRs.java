@@ -1,14 +1,16 @@
 package com.example.SocialNetwork.api.message;
 
+import com.example.SocialNetwork.api.Chat.ChatRs;
+import com.example.SocialNetwork.api.user.UserRs;
 import com.example.SocialNetwork.entity.MessageEntity;
 
 import java.util.Date;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-public record MessageRs (Long id, Long chatId, Long userId, String messageText, Date createdAt, Boolean isEdited) {
+public record MessageRs (Long id, ChatRs chat, UserRs user, String messageText, Date createdAt, Boolean isEdited) {
     public static MessageRs from(MessageEntity message) {
-        return new MessageRs(message.getId(), message.getChatId(), message.getUserId(), message.getMessageText(),
+        return new MessageRs(message.getId(), ChatRs.from(message.getChat()), UserRs.from(message.getUser()), message.getMessageText(),
                 message.getCreatedAt(), message.getIsEdited());
     }
 

@@ -23,13 +23,11 @@ import java.util.stream.Collectors;
 public class ChatService {
     private final ChatRepository repository;
     private final UserService userService;
-    private final MessageService messageService;
 
 
-    public ChatService(ChatRepository repository, UserService userService, MessageService messageService) {
+    public ChatService(ChatRepository repository, UserService userService) {
         this.repository = repository;
         this.userService = userService;
-        this.messageService = messageService;
     }
 
     private void checkUsers(Long firstUserId, Long secondUserId) {

@@ -1,12 +1,11 @@
 package com.example.SocialNetwork.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
+@Entity
+@Table(name = "users")
 public class UserEntity extends BaseEntity{
     @Column(nullable = false)
     private String firstName;

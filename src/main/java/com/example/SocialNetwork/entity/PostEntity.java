@@ -1,9 +1,9 @@
 package com.example.SocialNetwork.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "groups")
 public class PostEntity extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

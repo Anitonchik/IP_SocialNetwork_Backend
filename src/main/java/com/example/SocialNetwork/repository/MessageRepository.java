@@ -9,5 +9,5 @@ import java.util.Optional;
 
 
 public interface MessageRepository extends JpaRepository<MessageEntity, Long> {
-    List<MessageEntity> findByChatId(Long chatId);
+    List<MessageEntity> findByChat_Id(Long chatId);
 }

@@ -1,21 +1,20 @@
 package com.example.SocialNetwork.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import org.h2.engine.User;
 
 import java.util.Date;
-import java.util.List;
 
+@Entity
+@Table(name = "messages")
 public class MessageEntity extends BaseEntity{
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "chat_id", nullable = false)
-    private Long chatId;
+    private ChatEntity chat;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Long userId;
+    private UserEntity user;
     @Column(length = 4096, nullable = false)
     private String messageText;
     @Column(nullable = false)
@@ -25,27 +24,28 @@ public class MessageEntity extends BaseEntity{
 
     public MessageEntity() {super();}
 
-    public MessageEntity(Long chatId, Long userId, String messageText, Date createdAt) {
-        this.chatId = chatId;
+    public MessageEntity(ChatEntity chat, UserEntity user, String messageText, Date createdAt) {
+        this.chat = chat;
+        this.user = user;
         this.messageText = messageText;
         this.createdAt = createdAt;
         this.isEdited = false;
     }
 
-    public Long getChatId() {
-        return chatId;
+    public ChatEntity getChat() {
+        return chat;
     }
 
-    public void setChatId(Long chatId) {
-        this.chatId = chatId;
+    public void setChat(ChatEntity chat) {
+        this.chat = chat;
     }
 
-    public Long getUserId() {
-        return userId;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     public String getMessageText() {

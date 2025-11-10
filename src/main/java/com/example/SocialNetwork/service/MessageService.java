@@ -14,9 +14,13 @@ import java.util.List;
 @Service
 public class MessageService {
     private final MessageRepository repository;
+    private final ChatService chatService;
+    private final UserService userService;
 
-    public MessageService(MessageRepository repository) {
+    public MessageService(MessageRepository repository, ChatService chatService, UserService userService) {
         this.repository = repository;
+        this.chatService = chatService;
+        this.userService = userService;
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -38,12 +42,14 @@ public class MessageService {
 
     @Transactional(readOnly = true)
     public List<MessageRs> getByChat(Long chatId) {
-        return MessageRs.fromList(repository.findByChatId(chatId));
+        return MessageRs.fromList(repository.findByChat_Id(chatId));
     }
 
     @Transactional
     public MessageRs create(MessageRq dto) {
-        MessageEntity entity = new MessageEntity(dto.chatId(), dto.userId(), dto.messageText(), dto.createdAt());
+        final var chat = chatService.getEntity(dto.chatId());
+        final var user = userService.getEntity(dto.userId());
+        MessageEntity entity = new MessageEntity(chat, user, dto.messageText(), dto.createdAt());
         entity = repository.save(entity);
         return MessageRs.from(entity);
     }
@@ -51,8 +57,10 @@ public class MessageService {
     @Transactional
     public MessageRs update(Long id, MessageRq dto) {
         MessageEntity entity = getEntity(id);
-        entity.setChatId(dto.chatId());
-        entity.setUserId(dto.userId());
+        final var chat = chatService.getEntity(dto.chatId());
+        final var user = userService.getEntity(dto.userId());
+        entity.setChat(chat);
+        entity.setUser(user);
         entity.setMessageText(dto.messageText());
         entity.setCreatedAt(dto.createdAt());
         entity = repository.save(entity);
