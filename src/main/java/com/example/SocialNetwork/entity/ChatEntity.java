@@ -2,6 +2,7 @@ package com.example.SocialNetwork.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,18 +26,18 @@ public class ChatEntity extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "second_user_id", nullable = false)
     private UserEntity secondUser;
-    @OneToMany(mappedBy = "chat")
-    @OrderBy("createdAt ASC")
-    private List<MessageEntity> messages;
+    /*@OneToMany(mappedBy = "chat")
+    @OrderBy("createdAt ASC")*/
+    private String lastMessage;
 
     public ChatEntity() {super();}
 
-    public ChatEntity(Date createdAt, UserEntity firstUser, UserEntity secondUser, List<MessageEntity> messages) {
+    public ChatEntity(Date createdAt, UserEntity firstUser, UserEntity secondUser, String lastMessage) {
         this();
         this.createdAt = createdAt;
         this.firstUser = firstUser;
         this.secondUser = secondUser;
-        this.messages = messages;
+        this.lastMessage = lastMessage;
     }
 
     public Date getCreatedAt() {
@@ -55,12 +56,12 @@ public class ChatEntity extends BaseEntity{
 
     public void setSecondUser(UserEntity secondUser) { this.secondUser = secondUser; }
 
-    public List<MessageEntity> getMessages() {
-        return messages;
+    public String getLastMessage() {
+        return lastMessage;
     }
 
-    public void setMessages(List<MessageEntity> messages) {
-        this.messages = messages;
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
     }
 
     @PrePersist

@@ -22,6 +22,9 @@ public class MessageEntity extends BaseEntity{
     @Column(nullable = false)
     private Boolean isEdited;
 
+    @Column(nullable = false)
+    private Boolean isViewed;
+
     public MessageEntity() {super();}
 
     public MessageEntity(ChatEntity chat, UserEntity user, String messageText, Date createdAt) {
@@ -30,6 +33,7 @@ public class MessageEntity extends BaseEntity{
         this.messageText = messageText;
         this.createdAt = createdAt;
         this.isEdited = false;
+        this.isViewed = false;
     }
 
     public ChatEntity getChat() {
@@ -70,6 +74,14 @@ public class MessageEntity extends BaseEntity{
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Boolean getIsViewed() {
+        return isViewed;
+    }
+
+    public void setIsViewed(Boolean isViewed) {
+        this.isViewed = isViewed;
     }
 
 }

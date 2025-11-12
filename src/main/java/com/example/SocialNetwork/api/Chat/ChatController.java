@@ -29,30 +29,30 @@ public class ChatController {
         this.chatService = chatService;
     }
 
-    @GetMapping
-    public List<ChatRs> getAll() {
-        return chatService.getAll();
+    @GetMapping("{userId}")
+    public List<ChatRs> getAll(@PathVariable Long userId) {
+        return chatService.getAll(userId);
     }
 
-    @GetMapping("/{id}")
-    public ChatRs get(@PathVariable Long id) {
-        return chatService.get(id);
+    @GetMapping("/{chatId}/{userId}")
+    public ChatRs getChatById(@PathVariable Long chatId, @PathVariable Long userId) {
+        return chatService.get(chatId, userId);
     }
 
     @GetMapping("/userschats/{userId}")
     public List<ChatRs> getChatsByUser(@PathVariable Long userId) {return chatService.getByUser(userId);}
 
-    @GetMapping("/{userId}/{subscribedUserId}")
-    public ChatRs get(@PathVariable Long userId, @PathVariable Long subscribedUserId) {return chatService.getByUsers(userId, subscribedUserId);}
+    @GetMapping("/userschat/{userId}/{subscribedUserId}")
+    public ChatRs getChatByUsers(@PathVariable Long userId, @PathVariable Long subscribedUserId) {return chatService.getByUsers(userId, subscribedUserId);}
 
-    @PostMapping
-    public ChatRs create(@RequestBody @Valid ChatRq dto) {
-        return chatService.create(dto);
+    @PostMapping("{userId}")
+    public ChatRs create(@PathVariable Long userId, @RequestBody @Valid ChatRq dto) {
+        return chatService.create(dto, userId);
     }
 
 
-    @DeleteMapping("/{id}")
-    public ChatRs delete(@PathVariable Long id) {
-        return chatService.delete(id);
+    @DeleteMapping("/{chatId}/{userId}")
+    public ChatRs delete(@PathVariable Long chatId, @PathVariable Long userId) {
+        return chatService.delete(chatId, userId);
     }
 }

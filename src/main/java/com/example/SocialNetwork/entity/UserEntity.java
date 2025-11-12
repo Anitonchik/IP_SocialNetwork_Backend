@@ -41,8 +41,6 @@ public class UserEntity extends BaseEntity{
     )
     private List<UserEntity> subscriptions;
 
-    private int publications;
-
     public UserEntity(){super();}
 
     public UserEntity (String firstName, String lastName, String userName, String userAvatarURL,
@@ -104,14 +102,6 @@ public class UserEntity extends BaseEntity{
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public int getPublications() {
-        return publications;
-    }
-
-    public void setPublications(int publications) {
-        this.publications = publications;
     }
 
     public List<UserEntity> getFollowers() {

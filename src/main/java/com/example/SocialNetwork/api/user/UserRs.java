@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 public record UserRs (Long id, @NotBlank String firstName, @NotBlank String lastName, @NotBlank String userName,
-                      String userAvatarURL, String userDescription, int publications, String phone) {
+                      String userAvatarURL, String userDescription, String pageAddress, String phone) {
     public static UserRs from(UserEntity entity) {
         return new UserRs(entity.getId(), entity.getFirstName(), entity.getLastName(), entity.getUserName(),
-                entity.getUserAvatarURL(), entity.getUserDescription(), entity.getPublications(), entity.getPhone());
+                entity.getUserAvatarURL(), entity.getUserDescription(), entity.getPageAddress(), entity.getPhone());
     }
 
     public static List<UserRs> fromList(Iterable<UserEntity> entities) {

@@ -39,52 +39,52 @@ public class ChatService {
     @Transactional(propagation = Propagation.MANDATORY)
     public ChatEntity getEntity(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException(PostEntity.class, id));
+                .orElseThrow(() -> new NotFoundException(ChatEntity.class, id));
     }
 
     @Transactional(readOnly = true)
-    public List<ChatRs> getAll() {
-        return ChatRs.fromList(repository.findAll());
+    public List<ChatRs> getAll(Long userId) {
+        return ChatRs.fromList(repository.findAll(), userId);
     }
 
     @Transactional(readOnly = true)
-    public ChatRs get(Long id) {
+    public ChatRs get(Long id, Long userId) {
         final ChatEntity entity = getEntity(id);
-        return ChatRs.from(entity);
+        return ChatRs.from(entity, userId);
     }
 
     @Transactional(readOnly = true)
     public List<ChatRs> getByUser(Long userId) {
-        return ChatRs.fromList(repository.findUsersChats(userId));
+        var r = repository.findUsersChats(userId);
+        return ChatRs.fromList(repository.findUsersChats(userId), userId);
     }
 
     @Transactional(readOnly = true)
-    public ChatRs getByUsers(Long firstUserId, Long secondUserId) {
+    public ChatRs getByUsers(Long userId, Long correspondenceUser) {
         return ChatRs.from(
-                repository.findChatByUsers(firstUserId, secondUserId)
-                        .orElseThrow(() -> new RuntimeException("Чат между пользователями не найден"))
+                repository.findChatByUsers(userId, correspondenceUser)
+                        .orElseThrow(() -> new RuntimeException("Чат между пользователями не найден")), userId
         );
     }
 
     @Transactional
-    public ChatRs create(ChatRq dto) {
+    public ChatRs create(ChatRq dto, Long userId) {
         final UserEntity firstUser = userService.getEntity(dto.firstUserId());
         final UserEntity secondUser = userService.getEntity(dto.secondUserId());
         checkUsers(dto.firstUserId(), dto.secondUserId());
         ChatEntity chatEntity = new ChatEntity();
         chatEntity.setFirstUser(firstUser);
-        chatEntity.setFirstUser(secondUser);
+        chatEntity.setSecondUser(secondUser);
         chatEntity.setCreatedAt(dto.createdAt());
-        //chatEntity.setMessages(new ArrayList<>());
 
         chatEntity = repository.save(chatEntity);
-        return ChatRs.from(chatEntity);
+        return ChatRs.from(chatEntity, userId);
     }
 
     @Transactional
-    public ChatRs delete(Long id) {
+    public ChatRs delete(Long id, Long userId) {
         final ChatEntity entity = getEntity(id);
         repository.delete(entity);
-        return ChatRs.from(entity);
+        return ChatRs.from(entity, userId);
     }
 }

@@ -13,7 +13,10 @@ public class PostEntity extends BaseEntity{
     @Column(nullable = false)
     private String postTextContent;
 
+    public PostEntity(){super();}
+
     public PostEntity (UserEntity user, String postImageURL, String postTextContent) {
+        this();
         this.user = user;
         this.postImageURL = postImageURL;
         this.postTextContent = postTextContent;

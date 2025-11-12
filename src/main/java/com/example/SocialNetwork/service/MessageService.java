@@ -4,12 +4,14 @@ import com.example.SocialNetwork.api.NotFoundException;
 import com.example.SocialNetwork.api.message.MessageRq;
 import com.example.SocialNetwork.api.message.MessageRs;
 import com.example.SocialNetwork.entity.MessageEntity;
+import com.example.SocialNetwork.error.NotEqualsIdException;
 import com.example.SocialNetwork.repository.MessageRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class MessageService {
@@ -48,6 +50,12 @@ public class MessageService {
     @Transactional
     public MessageRs create(MessageRq dto) {
         final var chat = chatService.getEntity(dto.chatId());
+
+        if (!Objects.equals(chat.getFirstUser().getId(), dto.userId())
+                && !Objects.equals(chat.getSecondUser().getId(), dto.userId())) {
+            throw new NotEqualsIdException(chat.getFirstUser().getId(), chat.getSecondUser().getId(), dto.userId());
+        }
+
         final var user = userService.getEntity(dto.userId());
         MessageEntity entity = new MessageEntity(chat, user, dto.messageText(), dto.createdAt());
         entity = repository.save(entity);
