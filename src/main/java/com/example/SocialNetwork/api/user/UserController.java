@@ -34,6 +34,16 @@ public class UserController {
         return userService.get(id);
     }
 
+    @GetMapping("/followers/{id}")
+    public List<UserRs> getFollowers(@PathVariable Long id) {
+        return userService.getFollowers(id);
+    }
+
+    @GetMapping("/subscriptions/{id}")
+    public List<UserRs> getSubscriptions(@PathVariable Long id) {
+        return userService.getSubscriptions(id);
+    }
+
     @PostMapping
     public UserRs create(@RequestBody @Valid UserRq dto) {
         return userService.create(dto);
@@ -42,6 +52,11 @@ public class UserController {
     @PutMapping("/{id}")
     public UserRs update(@PathVariable Long id, @RequestBody @Valid UserRq dto) {
         return userService.update(id, dto);
+    }
+
+    @PutMapping("/{id}/{subscribedUserId}")
+    public UserRs createSubscriptions(@PathVariable Long id, @PathVariable Long subscribedUserId) {
+        return userService.createSubscription(id, subscribedUserId);
     }
 
     @DeleteMapping("/{id}")

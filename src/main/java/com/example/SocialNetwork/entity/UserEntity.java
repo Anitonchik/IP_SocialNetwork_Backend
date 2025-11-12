@@ -2,6 +2,7 @@ package com.example.SocialNetwork.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,7 +27,10 @@ public class UserEntity extends BaseEntity{
     @JoinTable(
             name = "Subscriptions",
             joinColumns = @JoinColumn(name = "UserId"),
-            inverseJoinColumns = @JoinColumn(name = "SubscribedUserId")
+            inverseJoinColumns = @JoinColumn(name = "SubscribedUserId"),
+            uniqueConstraints = {
+                    @UniqueConstraint(columnNames = {"UserId", "SubscribedUserId"})
+            }
     )
     private List<UserEntity> followers;
     @ManyToMany
@@ -51,14 +55,8 @@ public class UserEntity extends BaseEntity{
         this.userDescription = userDescription;
         this.pageAddress = pageAddress;
         this.phone = phone;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.followers = new ArrayList<>();
+        this.subscriptions = new ArrayList<>();
     }
 
     public String getFirstName() {

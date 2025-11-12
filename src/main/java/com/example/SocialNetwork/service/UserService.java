@@ -39,6 +39,16 @@ public class UserService {
     public List<UserRs> getAll() {return UserRs.fromList(repository.findAll());}
 
     @Transactional(readOnly = true)
+    public List<UserRs> getFollowers(Long id) {
+        return UserRs.fromList(getEntity(id).getFollowers());
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserRs> getSubscriptions(Long id) {
+        return UserRs.fromList(getEntity(id).getSubscriptions());
+    }
+
+    @Transactional(readOnly = true)
     public UserRs get(Long id) {
         final UserEntity entity = getEntity(id);
         return UserRs.from(entity);
@@ -54,6 +64,7 @@ public class UserService {
         return UserRs.from(entity);
     }
 
+    @Transactional
     public UserRs update(Long id, UserRq dto) {
         checkUserNameAndPhone(dto.userName(), dto.phone());
         UserEntity entity = getEntity(id);
@@ -67,6 +78,16 @@ public class UserService {
         return UserRs.from(entity);
     }
 
+    @Transactional
+    public UserRs createSubscription(Long id, Long subscribedUserId) {
+        UserEntity user = getEntity(id);
+        UserEntity subscribedUser = getEntity(subscribedUserId);
+        user.setSubscription(subscribedUser);
+        user = repository.save(user);
+        return UserRs.from(user);
+    }
+
+    @Transactional
     public UserRs delete(Long id) {
         final UserEntity entity = getEntity(id);
         repository.delete(entity);

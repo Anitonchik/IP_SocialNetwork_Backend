@@ -3,7 +3,7 @@ package com.example.SocialNetwork.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "groups")
+@Table(name = "posts")
 public class PostEntity extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
