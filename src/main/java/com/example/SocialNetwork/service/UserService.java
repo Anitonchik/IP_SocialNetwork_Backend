@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -49,6 +50,13 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public Boolean getSubscription(Long id, Long subscribedUserId) {
+        var subscriptions = getEntity(id).getSubscriptions();
+        return subscriptions.stream()
+                .anyMatch(subscribedUser -> Objects.equals(subscribedUser.getId(), subscribedUserId));
+    }
+
+    @Transactional(readOnly = true)
     public UserRs get(Long id) {
         final UserEntity entity = getEntity(id);
         return UserRs.from(entity);
@@ -82,6 +90,17 @@ public class UserService {
     public UserRs createSubscription(Long id, Long subscribedUserId) {
         UserEntity user = getEntity(id);
         UserEntity subscribedUser = getEntity(subscribedUserId);
+        user.setSubscription(subscribedUser);
+        user = repository.save(user);
+        return UserRs.from(user);
+    }
+
+    @Transactional
+    public UserRs deleteSubscription(Long id, Long subscribedUserId) {
+        UserEntity user = getEntity(id);
+        UserEntity subscribedUser = getEntity(subscribedUserId);
+        var sbc = user.getSubscriptions();
+        sbc.stream().
         user.setSubscription(subscribedUser);
         user = repository.save(user);
         return UserRs.from(user);

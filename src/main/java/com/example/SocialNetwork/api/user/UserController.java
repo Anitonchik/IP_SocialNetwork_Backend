@@ -44,6 +44,11 @@ public class UserController {
         return userService.getSubscriptions(id);
     }
 
+    @GetMapping("/subscription/{id}/{subscribedUserId}")
+    public Boolean getSubscription(@PathVariable Long id, @PathVariable Long subscribedUserId) {
+        return userService.getSubscription(id, subscribedUserId);
+    }
+
     @PostMapping
     public UserRs create(@RequestBody @Valid UserRq dto) {
         return userService.create(dto);
@@ -54,9 +59,10 @@ public class UserController {
         return userService.update(id, dto);
     }
 
+    //subscribedUserId - на кого подписываюсь
     @PutMapping("/{id}/{subscribedUserId}")
-    public UserRs createSubscriptions(@PathVariable Long id, @PathVariable Long subscribedUserId) {
-        return userService.createSubscription(id, subscribedUserId);
+    public UserRs createSubscriptions(@RequestBody @Valid UserToUserRq dto) {
+        return userService.createSubscription(dto.userId(), dto.subscribedUserId());
     }
 
     @DeleteMapping("/{id}")

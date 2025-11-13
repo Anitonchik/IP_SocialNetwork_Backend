@@ -17,8 +17,8 @@ public class UserDTO {
     private String userDescription;
     private String pageAddress;
     private int publications;
-    private List<UserToUserDTO> followers;
-    private List<UserToUserDTO> subscriptions;
+    private List<UserToUserRq> followers;
+    private List<UserToUserRq> subscriptions;
     private String phone;
 
     public UserDTO (int id, String firstName, String lastName, String userName, String userAvatarURL,
@@ -96,19 +96,19 @@ public class UserDTO {
         this.publications = publications;
     }
 
-    public List<UserToUserDTO> getFollowers() {
+    public List<UserToUserRq> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(List<UserToUserDTO> followers) {
+    public void setFollowers(List<UserToUserRq> followers) {
         this.followers = followers;
     }
 
-    public List<UserToUserDTO> getSubscriptions() {
+    public List<UserToUserRq> getSubscriptions() {
         return subscriptions;
     }
 
-    public void setSubscriptions(List<UserToUserDTO> subscriptions) {
+    public void setSubscriptions(List<UserToUserRq> subscriptions) {
         this.subscriptions = subscriptions;
     }
 
