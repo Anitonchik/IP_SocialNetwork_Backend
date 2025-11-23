@@ -9,8 +9,7 @@ import jakarta.persistence.Id;
 @MappedSuperclass
 public abstract class BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_sequence")
-    @SequenceGenerator(name = "hibernate_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
     protected BaseEntity() {

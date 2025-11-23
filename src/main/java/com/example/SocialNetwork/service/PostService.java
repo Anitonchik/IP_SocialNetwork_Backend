@@ -23,7 +23,8 @@ public class PostService {
     }
 
 
-    @Transactional(propagation = Propagation.MANDATORY)
+    //@Transactional(propagation = Propagation.MANDATORY)
+    @Transactional(readOnly = true)
     public PostEntity getEntity(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(PostEntity.class, id));

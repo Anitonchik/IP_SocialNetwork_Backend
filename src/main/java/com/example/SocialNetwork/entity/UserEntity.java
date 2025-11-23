@@ -26,7 +26,7 @@ public class UserEntity extends BaseEntity{
     @ManyToMany
     @JoinTable(
             name = "Subscriptions",
-            joinColumns = @JoinColumn(name = "UserId"),
+                joinColumns = @JoinColumn(name = "UserId"),
             inverseJoinColumns = @JoinColumn(name = "SubscribedUserId"),
             uniqueConstraints = {
                     @UniqueConstraint(columnNames = {"UserId", "SubscribedUserId"})

@@ -2,6 +2,7 @@ package com.example.SocialNetwork.api.user;
 
 import com.example.SocialNetwork.api.NotFoundException;
 import com.example.SocialNetwork.configuration.Constants;
+import com.example.SocialNetwork.entity.Report;
 import com.example.SocialNetwork.service.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -44,14 +45,19 @@ public class UserController {
         return userService.getSubscriptions(id);
     }
 
-    @GetMapping("/subscription/{id}/{subscribedUserId}")
-    public Boolean getSubscription(@PathVariable Long id, @PathVariable Long subscribedUserId) {
-        return userService.getSubscription(id, subscribedUserId);
+    @GetMapping("/subscription/{id}/{userFollowingId}")
+    public Boolean getSubscription(@PathVariable Long id, @PathVariable Long userFollowingId) {
+        return userService.getSubscription(id, userFollowingId);
     }
 
-    @PostMapping
-    public UserRs create(@RequestBody @Valid UserRq dto) {
-        return userService.create(dto);
+    @GetMapping("statistic/{id}")
+    public List<Report> getStatistic(@PathVariable Long id) {
+        return userService.getStatistic(id);
+    }
+
+    @DeleteMapping("/subscription/{id}/{userFollowingId}")
+    public List<UserRs> deleteSubscription(@PathVariable Long id, @PathVariable Long userFollowingId) {
+        return userService.deleteSubscription(id, userFollowingId);
     }
 
     @PutMapping("/{id}")
@@ -60,9 +66,9 @@ public class UserController {
     }
 
     //subscribedUserId - на кого подписываюсь
-    @PutMapping("/{id}/{subscribedUserId}")
-    public UserRs createSubscriptions(@RequestBody @Valid UserToUserRq dto) {
-        return userService.createSubscription(dto.userId(), dto.subscribedUserId());
+    @PutMapping("/{id}/{userFollowingId}")
+    public UserRs createSubscriptions(@PathVariable Long id, @PathVariable Long userFollowingId) {
+        return userService.createSubscription(id, userFollowingId);
     }
 
     @DeleteMapping("/{id}")

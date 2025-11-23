@@ -3,6 +3,7 @@ package com.example.SocialNetwork.service;
 import com.example.SocialNetwork.api.NotFoundException;
 import com.example.SocialNetwork.api.user.UserRq;
 import com.example.SocialNetwork.api.user.UserRs;
+import com.example.SocialNetwork.entity.Report;
 import com.example.SocialNetwork.entity.UserEntity;
 import com.example.SocialNetwork.error.AlreadyExistsException;
 import com.example.SocialNetwork.repository.UserRepository;
@@ -30,7 +31,8 @@ public class UserService {
         });
     }
 
-    @Transactional(propagation = Propagation.MANDATORY)
+    //@Transactional(propagation = Propagation.MANDATORY)
+    @Transactional(readOnly = true)
     public UserEntity getEntity(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(UserEntity.class, id));
@@ -87,23 +89,24 @@ public class UserService {
     }
 
     @Transactional
-    public UserRs createSubscription(Long id, Long subscribedUserId) {
+    public UserRs createSubscription(Long id, Long userFollowingId) {
         UserEntity user = getEntity(id);
-        UserEntity subscribedUser = getEntity(subscribedUserId);
-        user.setSubscription(subscribedUser);
+        UserEntity userFollowing = getEntity(userFollowingId);
+        user.setSubscription(userFollowing);
         user = repository.save(user);
         return UserRs.from(user);
     }
 
+    //userFollowing - на кого я подписана
     @Transactional
-    public UserRs deleteSubscription(Long id, Long subscribedUserId) {
+    public List<UserRs> deleteSubscription(Long id, Long userFollowingId) {
         UserEntity user = getEntity(id);
-        UserEntity subscribedUser = getEntity(subscribedUserId);
+        UserEntity subscribedUser = getEntity(userFollowingId);
         var sbc = user.getSubscriptions();
-        sbc.stream().
-        user.setSubscription(subscribedUser);
+        sbc.removeIf(sub -> Objects.equals(sub.getId(), userFollowingId));
+        user.setSubscriptions(sbc);
         user = repository.save(user);
-        return UserRs.from(user);
+        return UserRs.fromList(user.getSubscriptions());
     }
 
     @Transactional
@@ -111,6 +114,11 @@ public class UserService {
         final UserEntity entity = getEntity(id);
         repository.delete(entity);
         return UserRs.from(entity);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Report> getStatistic(Long id) {
+        return repository.getUserStatistics(id);
     }
 
 }

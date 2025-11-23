@@ -25,7 +25,8 @@ public class MessageService {
         this.userService = userService;
     }
 
-    @Transactional(propagation = Propagation.MANDATORY)
+    //@Transactional(propagation = Propagation.MANDATORY)
+    @Transactional(readOnly = true)
     public MessageEntity getEntity(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(MessageEntity.class, id));

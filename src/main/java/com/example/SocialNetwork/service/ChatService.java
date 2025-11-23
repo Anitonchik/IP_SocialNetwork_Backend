@@ -36,7 +36,8 @@ public class ChatService {
         });
     }
 
-    @Transactional(propagation = Propagation.MANDATORY)
+    //@Transactional(propagation = Propagation.MANDATORY)
+    @Transactional(readOnly = true)
     public ChatEntity getEntity(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ChatEntity.class, id));
