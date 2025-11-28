@@ -1,10 +1,7 @@
-package com.example.SocialNetwork.api.Chat;
+package com.example.SocialNetwork.api.chat;
 
-import com.example.SocialNetwork.api.message.MessageRs;
-import com.example.SocialNetwork.api.user.UserRq;
 import com.example.SocialNetwork.api.user.UserRs;
 import com.example.SocialNetwork.entity.ChatEntity;
-import com.example.SocialNetwork.entity.MessageEntity;
 
 import java.util.Date;
 import java.util.List;

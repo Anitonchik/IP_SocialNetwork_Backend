@@ -1,4 +1,4 @@
-package com.example.SocialNetwork.api.Post;
+package com.example.SocialNetwork.api.post;
 
 import com.example.SocialNetwork.api.user.UserDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,6 +1,6 @@
 package com.example.SocialNetwork.api.message;
 
-import com.example.SocialNetwork.api.Chat.ChatRs;
+import com.example.SocialNetwork.api.chat.ChatRs;
 import com.example.SocialNetwork.api.user.UserRs;
 import com.example.SocialNetwork.entity.MessageEntity;
 

@@ -1,7 +1,7 @@
 package com.example.SocialNetwork;
 
-import com.example.SocialNetwork.api.Chat.ChatRq;
-import com.example.SocialNetwork.api.Post.PostRq;
+import com.example.SocialNetwork.api.chat.ChatRq;
+import com.example.SocialNetwork.api.post.PostRq;
 import com.example.SocialNetwork.api.message.MessageRq;
 import com.example.SocialNetwork.api.user.UserRq;
 import com.example.SocialNetwork.service.ChatService;

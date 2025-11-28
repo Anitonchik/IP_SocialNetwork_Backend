@@ -1,6 +1,6 @@
 package com.example.SocialNetwork.api;
 
-import com.example.SocialNetwork.api.Chat.ChatRs;
+import com.example.SocialNetwork.api.chat.ChatRs;
 import com.example.SocialNetwork.entity.ChatEntity;
 import org.springframework.data.domain.Page;
 

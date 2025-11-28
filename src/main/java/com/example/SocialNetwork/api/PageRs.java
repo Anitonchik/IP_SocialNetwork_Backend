@@ -1,9 +1,7 @@
 package com.example.SocialNetwork.api;
 
-import com.example.SocialNetwork.api.Chat.ChatRs;
-import com.example.SocialNetwork.api.user.UserRs;
+import com.example.SocialNetwork.api.chat.ChatRs;
 import com.example.SocialNetwork.entity.ChatEntity;
-import com.example.SocialNetwork.entity.UserEntity;
 import org.springframework.data.domain.Page;
 
 import java.util.Collections;

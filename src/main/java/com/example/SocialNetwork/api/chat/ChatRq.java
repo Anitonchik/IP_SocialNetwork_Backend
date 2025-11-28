@@ -1,4 +1,4 @@
-package com.example.SocialNetwork.api.Chat;
+package com.example.SocialNetwork.api.chat;
 
 import jakarta.validation.constraints.NotNull;
 

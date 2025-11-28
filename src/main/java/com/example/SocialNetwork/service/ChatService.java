@@ -1,7 +1,7 @@
 package com.example.SocialNetwork.service;
 
-import com.example.SocialNetwork.api.Chat.ChatRq;
-import com.example.SocialNetwork.api.Chat.ChatRs;
+import com.example.SocialNetwork.api.chat.ChatRq;
+import com.example.SocialNetwork.api.chat.ChatRs;
 import com.example.SocialNetwork.api.PageRs;
 import com.example.SocialNetwork.error.NotFoundException;
 import com.example.SocialNetwork.entity.ChatEntity;

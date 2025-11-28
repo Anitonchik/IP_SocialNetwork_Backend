@@ -1,9 +1,7 @@
-package com.example.SocialNetwork.api.Post;
+package com.example.SocialNetwork.api.post;
 
-import com.example.SocialNetwork.api.user.UserRq;
 import com.example.SocialNetwork.api.user.UserRs;
 import com.example.SocialNetwork.entity.PostEntity;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.stream.StreamSupport;

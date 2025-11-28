@@ -1,9 +1,12 @@
 package com.example.SocialNetwork.api.user;
 
+import com.example.SocialNetwork.api.PageHelper;
+import com.example.SocialNetwork.api.PageRs;
 import com.example.SocialNetwork.configuration.Constants;
 import com.example.SocialNetwork.entity.Report;
 import com.example.SocialNetwork.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +23,9 @@ public class UserController {
 
 
     @GetMapping
-    public List<UserRs> getAll() {
-        return userService.getAll();
+    public PageRs<UserRs> getAll(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                 @RequestParam(defaultValue = "10") @Min(1) int size) {
+        return userService.getAll(PageHelper.toPageable(page, size));
     }
 
     @GetMapping("/{id}")

@@ -1,8 +1,11 @@
-package com.example.SocialNetwork.api.Chat;
+package com.example.SocialNetwork.api.chat;
 
+import com.example.SocialNetwork.api.PageHelper;
+import com.example.SocialNetwork.api.PageRs;
 import com.example.SocialNetwork.configuration.Constants;
 import com.example.SocialNetwork.service.ChatService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +21,10 @@ public class ChatController {
     }
 
     @GetMapping("{userId}")
-    public List<ChatRs> getAll(@PathVariable Long userId) {
-        return chatService.getAll(userId);
+    public PageRs<ChatRs> getAll(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                 @RequestParam(defaultValue = "10") @Min(1) int size,
+                                 @PathVariable Long userId) {
+        return chatService.getAll(PageHelper.toPageable(page, size), userId);
     }
 
     @GetMapping("/{chatId}/{userId}")

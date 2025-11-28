@@ -1,10 +1,9 @@
 package com.example.SocialNetwork.service;
 
 import com.example.SocialNetwork.api.PageRs;
-import com.example.SocialNetwork.api.message.MessageRs;
 import com.example.SocialNetwork.error.NotFoundException;
-import com.example.SocialNetwork.api.Post.PostRq;
-import com.example.SocialNetwork.api.Post.PostRs;
+import com.example.SocialNetwork.api.post.PostRq;
+import com.example.SocialNetwork.api.post.PostRs;
 import com.example.SocialNetwork.entity.PostEntity;
 import com.example.SocialNetwork.entity.UserEntity;
 import com.example.SocialNetwork.repository.PostRepository;
