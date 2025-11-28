@@ -52,7 +52,7 @@ public class SocialNetworkApplication implements CommandLineRunner {
 
 		final var chat1 = chatService.create(new ChatRq(new Date(),  user1.id(),  user2.id()),  user1.id());
 		final var chat2 = chatService.create(new ChatRq(new Date(),  user1.id(),  user3.id()),  user1.id());
-		final var chat3 = chatService.create(new ChatRq(new Date(),  user1.id(),  user4.id()),  user1.id());
+		//final var chat3 = chatService.create(new ChatRq(new Date(),  user1.id(),  user4.id()),  user1.id());
 		final var chat4 = chatService.create(new ChatRq(new Date(),  user2.id(),  user3.id()),  user2.id());
 
 		final var message1 = messageService.create(new MessageRq(chat1.id(), user1.id(), "blablabla", new Date()));
@@ -62,7 +62,7 @@ public class SocialNetworkApplication implements CommandLineRunner {
 		final var message5 = messageService.create(new MessageRq(chat2.id(), user3.id(), ";fvns;kbjn", new Date()));
 		final var message6 = messageService.create(new MessageRq(chat2.id(), user1.id(), "sbvmmbm", new Date()));
 		final var message7 = messageService.create(new MessageRq(chat2.id(), user1.id(), "[sdobj", new Date()));
-		final var message8 = messageService.create(new MessageRq(chat3.id(), user1.id(), "apfiuvhapfiuvh", new Date()));
+		//final var message8 = messageService.create(new MessageRq(chat3.id(), user1.id(), "apfiuvhapfiuvh", new Date()));
 
 	}
 

@@ -14,12 +14,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByUserName(String userName);
     Optional<UserEntity> findByPhone(String phone);
 
-    /*@Query("SELECT c.createdAt as date, " +
-            "COUNT(*) as chatCount " +
-            "FROM Chats c " +
-            "WHERE (c.firstUser.id = :userId OR c.secondUser.id = :userId) " +
-            "GROUP c.createdAt" +
-            "ORDER BY date ")*/
     @Query(value = "SELECT EXTRACT(DAY FROM c.CREATED_AT) as date, " +
             "COUNT(*) as chatCount " +
             "FROM Chats c " +
