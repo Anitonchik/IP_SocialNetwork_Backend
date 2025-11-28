@@ -1,4 +1,4 @@
-package com.example.SocialNetwork.api;
+package com.example.SocialNetwork.error;
 
 public class NotFoundException extends RuntimeException {
     public <T> NotFoundException(Class<T> clazz, Long id) {

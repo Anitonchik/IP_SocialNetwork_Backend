@@ -1,20 +1,11 @@
 package com.example.SocialNetwork.api.Post;
 
-import com.example.SocialNetwork.api.Chat.ChatRq;
-import com.example.SocialNetwork.api.Chat.ChatRs;
-import com.example.SocialNetwork.api.NotFoundException;
-import com.example.SocialNetwork.api.user.UserController;
 import com.example.SocialNetwork.configuration.Constants;
-import com.example.SocialNetwork.service.ChatService;
 import com.example.SocialNetwork.service.PostService;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequestMapping(Constants.API_URL + PostController.URL)

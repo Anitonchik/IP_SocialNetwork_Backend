@@ -1,6 +1,8 @@
 package com.example.SocialNetwork.service;
 
-import com.example.SocialNetwork.api.NotFoundException;
+import com.example.SocialNetwork.api.PageRs;
+import org.springframework.data.domain.Pageable;
+import com.example.SocialNetwork.error.NotFoundException;
 import com.example.SocialNetwork.api.user.UserRq;
 import com.example.SocialNetwork.api.user.UserRs;
 import com.example.SocialNetwork.entity.Report;
@@ -31,15 +33,16 @@ public class UserService {
         });
     }
 
-    //@Transactional(propagation = Propagation.MANDATORY)
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.MANDATORY)
     public UserEntity getEntity(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(UserEntity.class, id));
     }
 
     @Transactional(readOnly = true)
-    public List<UserRs> getAll() {return UserRs.fromList(repository.findAll());}
+    public PageRs<UserRs> getAll(Pageable pageable) {
+        return PageRs.from(repository.findAll(pageable), UserRs::from);
+    }
 
     @Transactional(readOnly = true)
     public List<UserRs> getFollowers(Long id) {

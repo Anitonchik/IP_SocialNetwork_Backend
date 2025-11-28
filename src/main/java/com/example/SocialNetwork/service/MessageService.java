@@ -1,13 +1,15 @@
 package com.example.SocialNetwork.service;
 
-import com.example.SocialNetwork.api.NotFoundException;
+import com.example.SocialNetwork.api.PageRs;
+import com.example.SocialNetwork.api.user.UserRs;
+import com.example.SocialNetwork.error.NotFoundException;
 import com.example.SocialNetwork.api.message.MessageRq;
 import com.example.SocialNetwork.api.message.MessageRs;
 import com.example.SocialNetwork.entity.MessageEntity;
 import com.example.SocialNetwork.error.NotEqualsIdException;
 import com.example.SocialNetwork.repository.MessageRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -33,9 +35,10 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public List<MessageRs> getAll() {
-        return MessageRs.fromList(repository.findAll());
+    public PageRs<MessageRs> getAll(Pageable pageable) {
+        return PageRs.from(repository.findAll(pageable), MessageRs::from);
     }
+
 
     @Transactional(readOnly = true)
     public MessageRs get(Long id) {

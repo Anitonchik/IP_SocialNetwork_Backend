@@ -2,22 +2,17 @@ package com.example.SocialNetwork.service;
 
 import com.example.SocialNetwork.api.Chat.ChatRq;
 import com.example.SocialNetwork.api.Chat.ChatRs;
-import com.example.SocialNetwork.api.NotFoundException;
-import com.example.SocialNetwork.api.user.UserRs;
+import com.example.SocialNetwork.api.PageRs;
+import com.example.SocialNetwork.error.NotFoundException;
 import com.example.SocialNetwork.entity.ChatEntity;
-import com.example.SocialNetwork.entity.PostEntity;
 import com.example.SocialNetwork.entity.UserEntity;
 import com.example.SocialNetwork.error.AlreadyExistsException;
 import com.example.SocialNetwork.repository.ChatRepository;
-import org.hibernate.dialect.unique.CreateTableUniqueDelegate;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ChatService {
@@ -44,8 +39,8 @@ public class ChatService {
     }
 
     @Transactional(readOnly = true)
-    public List<ChatRs> getAll(Long userId) {
-        return ChatRs.fromList(repository.findAll(), userId);
+    public PageRs<ChatRs> getAll(Pageable pageable, long userId) {
+        return PageRs.from(repository.findAll(pageable), userId);
     }
 
     @Transactional(readOnly = true)

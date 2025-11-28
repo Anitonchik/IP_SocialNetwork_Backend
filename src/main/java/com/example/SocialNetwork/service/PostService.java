@@ -1,13 +1,15 @@
 package com.example.SocialNetwork.service;
 
-import com.example.SocialNetwork.api.NotFoundException;
+import com.example.SocialNetwork.api.PageRs;
+import com.example.SocialNetwork.api.message.MessageRs;
+import com.example.SocialNetwork.error.NotFoundException;
 import com.example.SocialNetwork.api.Post.PostRq;
 import com.example.SocialNetwork.api.Post.PostRs;
 import com.example.SocialNetwork.entity.PostEntity;
 import com.example.SocialNetwork.entity.UserEntity;
 import com.example.SocialNetwork.repository.PostRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -31,8 +33,8 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public List<PostRs> getAll() {
-        return PostRs.fromList(repository.findAll());
+    public PageRs<PostRs> getAll(Pageable pageable) {
+        return PageRs.from(repository.findAll(pageable), PostRs::from);
     }
 
     @Transactional(readOnly = true)
