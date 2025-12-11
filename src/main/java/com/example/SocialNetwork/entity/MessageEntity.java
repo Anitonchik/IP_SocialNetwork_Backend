@@ -1,13 +1,13 @@
 package com.example.SocialNetwork.entity;
 
 import jakarta.persistence.*;
-import org.h2.engine.User;
+//import org.h2.engine.User;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "messages")
-public class MessageEntity extends BaseEntity{
+public class MessageEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "chat_id", nullable = false)
     private ChatEntity chat;
@@ -17,15 +17,15 @@ public class MessageEntity extends BaseEntity{
     private UserEntity user;
     @Column(length = 4096, nullable = false)
     private String messageText;
-    @Column(nullable = false)
+    @Column(name = "created_at", nullable = false)
     private Date createdAt;
-    @Column(nullable = false)
+    @Column(name = "is_edited", nullable = false)
     private Boolean isEdited;
 
-    @Column(nullable = false)
-    private Boolean isViewed;
 
-    public MessageEntity() {super();}
+    public MessageEntity() {
+        super();
+    }
 
     public MessageEntity(ChatEntity chat, UserEntity user, String messageText, Date createdAt) {
         this.chat = chat;
@@ -33,7 +33,6 @@ public class MessageEntity extends BaseEntity{
         this.messageText = messageText;
         this.createdAt = createdAt;
         this.isEdited = false;
-        this.isViewed = false;
     }
 
     public ChatEntity getChat() {
@@ -74,14 +73,6 @@ public class MessageEntity extends BaseEntity{
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public Boolean getIsViewed() {
-        return isViewed;
-    }
-
-    public void setIsViewed(Boolean isViewed) {
-        this.isViewed = isViewed;
     }
 
 }

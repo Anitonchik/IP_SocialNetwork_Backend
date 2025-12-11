@@ -17,8 +17,6 @@ import java.util.List;
     }
 )
 public class ChatEntity extends BaseEntity{
-    @Column(nullable = false)
-    private Date createdAt;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "first_user_id", nullable = false)
     private UserEntity firstUser;
@@ -26,26 +24,13 @@ public class ChatEntity extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "second_user_id", nullable = false)
     private UserEntity secondUser;
-    /*@OneToMany(mappedBy = "chat")
-    @OrderBy("createdAt ASC")*/
-    private String lastMessage;
 
     public ChatEntity() {super();}
 
-    public ChatEntity(Date createdAt, UserEntity firstUser, UserEntity secondUser, String lastMessage) {
+    public ChatEntity(UserEntity firstUser, UserEntity secondUser) {
         this();
-        this.createdAt = createdAt;
         this.firstUser = firstUser;
         this.secondUser = secondUser;
-        this.lastMessage = lastMessage;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 
     public UserEntity getFirstUser() { return firstUser; }
@@ -55,14 +40,6 @@ public class ChatEntity extends BaseEntity{
     public UserEntity getSecondUser() { return secondUser; }
 
     public void setSecondUser(UserEntity secondUser) { this.secondUser = secondUser; }
-
-    public String getLastMessage() {
-        return lastMessage;
-    }
-
-    public void setLastMessage(String lastMessage) {
-        this.lastMessage = lastMessage;
-    }
 
     @PrePersist
     @PreUpdate

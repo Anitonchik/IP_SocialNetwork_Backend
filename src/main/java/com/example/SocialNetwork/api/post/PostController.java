@@ -32,10 +32,16 @@ public class PostController {
     }
 
     @GetMapping("/usersPosts/{userId}")
-    public List<PostRs> getPostsByUser(@PathVariable Long userId) {return postService.getByUser(userId);}
+    public PageRs<PostRs> getPostsByUser(@PathVariable Long userId,
+                                       @RequestParam(defaultValue = "1") @Min(1) int page,
+                                       @RequestParam(defaultValue = "10") @Min(1) int size) {
+        return postService.getByUser(PageHelper.toPageable(page, size), userId);}
 
     @GetMapping("/notUsersPosts/{userId}")
-    public List<PostRs> getPostsByNotUser(@PathVariable Long userId) {return postService.getNotByUser(userId);}
+    public PageRs<PostRs> getPostsByNotUser(@PathVariable Long userId,
+                                          @RequestParam(defaultValue = "1") @Min(1) int page,
+                                          @RequestParam(defaultValue = "10") @Min(1) int size) {
+        return postService.getNotByUser(PageHelper.toPageable(page, size), userId);}
 
     @PostMapping
     public PostRs create(@RequestBody @Valid PostRq dto) {

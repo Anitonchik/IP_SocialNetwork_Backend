@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-sequences
+      author: Anita
+      changes:
+        - createSequence:
+            sequenceName: users_seq
+            startValue: 1
+            incrementBy: 50
+            minValue: 1
+            cycle: false
+            dataType: bigint
+        - createSequence:
+            sequenceName: posts_seq
+            startValue: 1
+            incrementBy: 50
+            minValue: 1
+            cycle: false
+            dataType: bigint
+        - createSequence:
+            sequenceName: messages_seq
+            startValue: 1
+            incrementBy: 50
+            minValue: 1
+            cycle: false
+            dataType: bigint
+        - createSequence:
+            sequenceName: chats_seq
+            startValue: 1
+            incrementBy: 50
+            minValue: 1
+            cycle: false
+            dataType: bigint

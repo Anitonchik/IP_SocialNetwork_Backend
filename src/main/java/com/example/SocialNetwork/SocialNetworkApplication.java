@@ -47,7 +47,23 @@ public class SocialNetworkApplication implements CommandLineRunner {
 		final var post1 = postService.create(new PostRq(1L, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR6mnq4H6pO_Ii0O5Qe8ZpzH2gKeMfJ7irIw&s", "ddcs"));
 		final var post2 = postService.create(new PostRq(1L, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9-OqGQLZzoAWuNADV6-tiUGCwdmVKYtT4ew&s", "ddcs"));
 		final var post3 = postService.create(new PostRq(1L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "ddcs"));
-		final var post4 = postService.create(new PostRq(2L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "ddcs"));
+		final var post22 = postService.create(new PostRq(1L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "ddcs"));
+		final var post33 = postService.create(new PostRq(1L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "ddcs"));
+		final var post32 = postService.create(new PostRq(1L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "6"));
+		final var post34 = postService.create(new PostRq(1L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "ddcs"));
+		final var post35 = postService.create(new PostRq(1L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "ddcs"));
+
+		final var post4 = postService.create(new PostRq(2L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "1"));
+        final var post5 = postService.create(new PostRq(2L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "2"));
+		final var post6 = postService.create(new PostRq(2L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "3"));
+		final var post7 = postService.create(new PostRq(2L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "4"));
+		final var post8 = postService.create(new PostRq(2L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "5"));
+		final var post9 = postService.create(new PostRq(2L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "6"));
+		final var post10 = postService.create(new PostRq(2L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "7"));
+		final var post11 = postService.create(new PostRq(2L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "8"));
+		final var post12 = postService.create(new PostRq(2L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "9"));
+		final var post13 = postService.create(new PostRq(2L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "10"));
+		final var post14 = postService.create(new PostRq(2L, "https://kartinki.pics/uploads/posts/2022-02/1644939485_55-kartinkin-net-p-estetichnie-kartinki-pinterest-59.jpg", "11"));
 
 
 		final var chat1 = chatService.create(new ChatRq(new Date(),  user1.id(),  user2.id()),  user1.id());

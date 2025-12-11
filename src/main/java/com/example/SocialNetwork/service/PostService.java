@@ -42,12 +42,13 @@ public class PostService {
         return PostRs.from(entity);
     }
 
-    @Transactional(readOnly = true)
-    public List<PostRs> getByUser(Long userId) {return PostRs.fromList(repository.findByUser_Id(userId));}
 
     @Transactional(readOnly = true)
-    public List<PostRs> getNotByUser(Long userId) {
-        return PostRs.fromList(repository.findByUser_IdNot(userId));
+    public PageRs<PostRs> getByUser(Pageable pageable, Long userId) {return PageRs.from(repository.findByUser_IdOrderByIdDesc(pageable, userId), PostRs::from);}
+
+    @Transactional(readOnly = true)
+    public PageRs<PostRs> getNotByUser(Pageable pageable, Long userId) {
+        return PageRs.from(repository.findByUser_IdNotOrderByIdDesc(pageable, userId), PostRs::from);
     }
 
     @Transactional

@@ -4,6 +4,7 @@ logging:
     com:
       example:
         SocialNetwork: DEBUG
+
 spring:
   datasource:
     url: jdbc:h2:file:./data

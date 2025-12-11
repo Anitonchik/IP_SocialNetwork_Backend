@@ -71,7 +71,7 @@ public class ChatService {
         ChatEntity chatEntity = new ChatEntity();
         chatEntity.setFirstUser(firstUser);
         chatEntity.setSecondUser(secondUser);
-        chatEntity.setCreatedAt(dto.createdAt());
+        //chatEntity.setCreatedAt(dto.createdAt());
 
         chatEntity = repository.save(chatEntity);
         return ChatRs.from(chatEntity, userId);

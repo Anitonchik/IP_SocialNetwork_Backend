@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.5'
 	id 'io.spring.dependency-management' version '1.1.7'
+    id "com.github.node-gradle.node" version "7.1.0" apply false
+    id "org.liquibase.gradle" version "2.2.2" apply false
 }
 
 group = 'com.example'
@@ -50,7 +52,7 @@ ext {
 
 
 configurations {
-	mockitoAgent
+    mockitoAgent
 }
 
 if (springProfiles.contains("front")) {
@@ -61,12 +63,9 @@ if (springProfiles.contains("dev")) {
 }
 
 dependencies {
-	implementation "org.springframework.boot:spring-boot-starter-web"
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
-
-	/*implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-	implementation "com.h2database:h2:${h2Version}"*/
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
 
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
     runtimeOnly "org.liquibase:liquibase-core:${liquibaseVersion}"
@@ -85,7 +84,22 @@ dependencies {
     mockitoAgent("org.mockito:mockito-core:${mockitoVersion}") {
         transitive = false
     }
+}
 
+bootRun {
+    def currentArgs = ["--spring.profiles.active=" + currentProfiles]
+    if (project.hasProperty("args")) {
+        currentArgs.addAll(project.args.tokenize())
+    }
+    args currentArgs
+}
+
+processResources {
+    filesMatching("**/application.yml") {
+        filter { line ->
+            line.replace("active: dev", "active: ${currentProfiles}")
+        }
+    }
 }
 
 tasks.named("test") {

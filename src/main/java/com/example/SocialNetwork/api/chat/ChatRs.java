@@ -8,13 +8,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.StreamSupport;
 
-public record ChatRs (Long id, UserRs correspondenceUser, Date createdAt, String lastMessage){
+public record ChatRs (Long id, UserRs correspondenceUser){
 
 
     public static ChatRs from(ChatEntity chat, Long userId) {
         return new ChatRs(chat.getId(), UserRs.from(Objects.equals(chat.getFirstUser().getId(), userId)
-                        ? chat.getSecondUser() : chat.getFirstUser() ),
-                chat.getCreatedAt(), chat.getLastMessage());
+                        ? chat.getSecondUser() : chat.getFirstUser() ));
     }
 
     public static List<ChatRs> fromList(Iterable<ChatEntity> entities, Long userId) {

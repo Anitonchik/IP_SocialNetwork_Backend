@@ -1,0 +1,187 @@
+databaseChangeLog:
+
+  # пользователь
+  - changeSet:
+      id: create-table-users
+      author: Anita
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: user_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+              - column:
+                  name: user_avatar_url
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: user_description
+                  type: TEXT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: page_address
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+              - column:
+                  name: phone
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  # посты
+  - changeSet:
+      id: create-posts-table
+      author: Anita
+      changes:
+        - createTable:
+            tableName: posts
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_posts_user
+                    references: users(id)
+
+              - column:
+                  name: post_image_url
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: post_text_content
+                  type: VARCHAR(1000)
+                  constraints:
+                    nullable: false
+
+  # сообщения
+  - changeSet:
+      id: create-messages-table
+      author: Anita
+      changes:
+        - createTable:
+            tableName: messages
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: chat_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_messages_chat
+                    references: chats(id)
+
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_messages_user
+                    references: users(id)
+
+              - column:
+                  name: message_text
+                  type: VARCHAR(4096)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: is_edited
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+
+  # чаты
+  - changeSet:
+      id: create-chats-table
+      author: Anita
+      changes:
+        - createTable:
+            tableName: chats
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: first_user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_chats_first_user
+                    references: users(id)
+
+              - column:
+                  name: second_user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_chats_second_user
+                    references: users(id)
+
+        - addUniqueConstraint:
+            tableName: chats
+            columnNames: first_user_id, second_user_id
+            constraintName: id_chat_users_pair
+
+
