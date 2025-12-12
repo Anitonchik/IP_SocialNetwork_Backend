@@ -15,7 +15,7 @@ public class MessageEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
-    @Column(length = 4096, nullable = false)
+    @Column(name = "message_text", length = 4096, nullable = false)
     private String messageText;
     @Column(name = "created_at", nullable = false)
     private Date createdAt;

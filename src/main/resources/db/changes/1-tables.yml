@@ -4,6 +4,11 @@ databaseChangeLog:
   - changeSet:
       id: create-table-users
       author: Anita
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            tableExists:
+              tableName: users
       changes:
         - createTable:
             tableName: users
@@ -36,14 +41,14 @@ databaseChangeLog:
                     unique: true
 
               - column:
-                  name: user_avatar_url
+                  name: user_avatarurl
                   type: VARCHAR(500)
                   constraints:
                     nullable: false
 
               - column:
                   name: user_description
-                  type: TEXT
+                  type: VARCHAR(255)
                   constraints:
                     nullable: false
 
@@ -65,6 +70,11 @@ databaseChangeLog:
   - changeSet:
       id: create-posts-table
       author: Anita
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            tableExists:
+              tableName: posts
       changes:
         - createTable:
             tableName: posts
@@ -97,10 +107,58 @@ databaseChangeLog:
                   constraints:
                     nullable: false
 
+
+  # чаты
+  - changeSet:
+      id: create-chats-table
+      author: Anita
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            tableExists:
+              tableName: chats
+      changes:
+        - createTable:
+            tableName: chats
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: first_user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_chats_first_user
+                    references: users(id)
+
+              - column:
+                  name: second_user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_chats_second_user
+                    references: users(id)
+
+        - addUniqueConstraint:
+            tableName: chats
+            columnNames: first_user_id, second_user_id
+            constraintName: id_chat_users_pair
+
   # сообщения
   - changeSet:
       id: create-messages-table
       author: Anita
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            tableExists:
+              tableName: messages
       changes:
         - createTable:
             tableName: messages
@@ -147,41 +205,27 @@ databaseChangeLog:
                   constraints:
                     nullable: false
 
-  # чаты
+
   - changeSet:
-      id: create-chats-table
+      id: create-table-subscriptions
       author: Anita
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            tableExists:
+              tableName: SUBSCRIPTIONS
       changes:
         - createTable:
-            tableName: chats
+            tableName: SUBSCRIPTIONS
             columns:
               - column:
-                  name: id
+                  name: subscribed_user_id
                   type: BIGINT
-                  autoIncrement: true
                   constraints:
-                    primaryKey: true
                     nullable: false
-
               - column:
-                  name: first_user_id
+                  name: user_id
                   type: BIGINT
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_chats_first_user
-                    references: users(id)
-
-              - column:
-                  name: second_user_id
-                  type: BIGINT
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_chats_second_user
-                    references: users(id)
-
-        - addUniqueConstraint:
-            tableName: chats
-            columnNames: first_user_id, second_user_id
-            constraintName: id_chat_users_pair
-
 

@@ -8,9 +8,9 @@ public class PostEntity extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
-    @Column(nullable = false)
+    @Column(name = "post_image_url", nullable = false)
     private String postImageURL;
-    @Column(nullable = false)
+    @Column(name = "post_text_content", nullable = false)
     private String postTextContent;
 
     public PostEntity(){super();}

@@ -26,18 +26,18 @@ public class UserEntity extends BaseEntity{
     @ManyToMany
     @JoinTable(
             name = "Subscriptions",
-                joinColumns = @JoinColumn(name = "UserId"),
-            inverseJoinColumns = @JoinColumn(name = "SubscribedUserId"),
+                joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "subscribed_user_id"),
             uniqueConstraints = {
-                    @UniqueConstraint(columnNames = {"UserId", "SubscribedUserId"})
+                    @UniqueConstraint(columnNames = {"user_id", "subscribed_user_id"})
             }
     )
     private List<UserEntity> followers;
     @ManyToMany
     @JoinTable(
             name = "Subscriptions",
-            joinColumns = @JoinColumn(name = "SubscribedUserId"),
-            inverseJoinColumns = @JoinColumn(name = "UserId")
+            joinColumns = @JoinColumn(name = "subscribed_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<UserEntity> subscriptions;
 
