@@ -97,7 +97,7 @@ bootRun {
 processResources {
     filesMatching("**/application.yml") {
         filter { line ->
-            line.replace("active: dev", "active: ${currentProfiles}")
+            line.replace("active: prod", "active: ${currentProfiles}")
         }
     }
 }

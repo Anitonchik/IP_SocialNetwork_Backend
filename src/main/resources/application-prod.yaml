@@ -11,4 +11,4 @@ spring:
     password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
-    show-sql: false
+    show-sql: true
