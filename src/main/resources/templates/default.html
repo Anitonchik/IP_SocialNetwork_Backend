@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html
+        lang="ru"
+        th:attr="data-bs-theme=${@themeUtil.getTheme()}"
+        class="h-100"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Social Network</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <th:block layout:fragment="css"></th:block>
+</head>
+<body class="background">
+<header class="d-flex justify-content-between align-items-center container rounded mt-2 mx-auto container-background" style="max-width: 1000px;">
+    <div class="d-flex flex-column align-items-center">
+        <div class="d-flex justify-content-center">
+            <img class="logo-img" src="atributes/logo.png" alt="logo">
+        </div>
+        <div class="main-sub-text">Com FUN</div>
+    </div>
+    <nav>
+        <div class="d-flex align-items-center list-unstyled gap-4 gap-md-5" th:with="path=${@webHelper.getServletPath()}">
+            <a
+                    class="d-flex align-items-center justify-content-center"
+                    href="/settings"
+                    th:classappend="${path.startsWith('/settings') ? 'active' : ''}"
+            >
+                <p class="h2 mb-2">
+                    <i class="bi bi-gear-fill" style="color: #fffacd;"></i>
+                </p>
+            </a>
+            <a
+                    class="d-flex align-items-center justify-content-center"
+                    href="/chats"
+                    th:classappend="${path.startsWith('/chats') ? 'active' : ''}"
+            >
+                <p class="h2 mb-2">
+                    <i class="bi bi-messenger" style="color: #fffacd;"></i>
+                </p>
+            </a>
+            <a
+                    class="d-flex align-items-center justify-content-center"
+                    href="/profile"
+                    th:classappend="${path.startsWith('/profile') ? 'active' : ''}"
+            >
+                <p class="h2 mb-2">
+                    <img class="profile" src="profile/ava.jpg" alt="avatar">
+                </p>
+            </a>
+        </div>
+    </nav>
+</header>
+
+<class>
+
+</class>
+<script src="script.js"></script>
+</body>
+</html>

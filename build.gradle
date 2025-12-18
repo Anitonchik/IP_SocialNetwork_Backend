@@ -77,6 +77,16 @@ dependencies {
         runtimeOnly "com.h2database:h2:${h2Version}"
     }
 
+    if (!springProfiles.contains("front")) {
+        implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+        implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:${thymeleafLayoutVersion}"
+        developmentOnly "org.springframework.boot:spring-boot-devtools"
+        runtimeOnly "org.webjars.npm:bootstrap:${bootstrapVersion}"
+        runtimeOnly "org.webjars.npm:bootstrap-icons:${bootstrapIconsVersion}"
+    } else {
+        implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
+    }
+
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 
@@ -94,16 +104,23 @@ bootRun {
     args currentArgs
 }
 
-processResources {
-    filesMatching("**/application.yml") {
-        filter { line ->
-            line.replace("active: prod", "active: ${currentProfiles}")
-        }
-    }
-}
-
 tasks.named("test") {
 	useJUnitPlatform()
 	jvmArgs += "-Xshare:off"
 	jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
+}
+
+processResources {
+    filesMatching("**/application.yml") {
+        filter { line ->
+            line.replace("active: dev", "active: ${currentProfiles}")
+        }
+    }
+    if (springProfiles.contains("front")) {
+        doLast{
+            def buildDir = project.buildDir
+            delete "$buildDir/resources/main/public"
+            delete "$buildDir/resources/main/templates"
+        }
+    }
 }

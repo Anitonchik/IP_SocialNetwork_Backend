@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html
+        lang="ru"
+        th:attr="data-bs-theme=${@themeUtil.getTheme()}"
+        class="h-100"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.w3.org/1999/xhtml">
+>
+
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Social Network</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <th:block layout:fragment="css"></th:block>
+</head>
+
+
+
+<div layout:fragment="content">
+    <!-- Информация профиля -->
+    <div class="d-flex flex-column justify-content-between ms-auto me-auto container container-background profile-info"
+         style="max-width: 1000px;">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <div class="d-flex justify-content-around align-items-center gap-3">
+                <img class="profile-info-img"
+                     th:src="@{${user.avatarUrl != null} ? ${user.avatarUrl} : '/profile/default-avatar.jpg'}"
+                     alt="avatar">
+                <div class="main-text">[[${user.username}]]</div>
+            </div>
+            <div class="d-flex justify-content-md-between profile-inf me-0 me-md-5">
+                <div>
+                    <p class="text-center main-text">Publications</p>
+                    <p class="text-center main-text">[[${user.postsCount}]]</p>
+                </div>
+                <div>
+                    <p class="text-center main-text">Followers</p>
+                    <p class="text-center main-text">[[${user.followersCount}]]</p>
+                </div>
+                <div>
+                    <p class="text-center main-text">Subscriptions</p>
+                    <p class="text-center main-text">[[${user.subscriptionsCount}]]</p>
+                </div>
+            </div>
+        </div>
+        <div class="profile-info-discription" th:text="${user.bio}">
+            <!-- Биография пользователя -->
+        </div>
+    </div>
+
+    <!-- Форма создания поста -->
+    <div class="container container-background ms-auto me-auto text-center"
+         style="margin-top: 10px; max-width: 1000px;">
+        <button id="createPostButton" class="btn btn-light button-sbc" style="width: 90%;">
+            Create post
+        </button>
+
+        <div class="adding-post" id="postForm" style="display: none;">
+            <form th:action="@{/profile/post}" method="post" enctype="multipart/form-data">
+                <div class="input-file-row adding-post-image">
+                    <label class="input-file">
+                        <input type="file" name="images" multiple accept=".png, .jpeg, .jpg"
+                               th:onchange="previewFiles(this)">
+                        <img th:src="@{/atributes/download.png}" alt="upload">
+                    </label>
+                    <div class="input-file-list" id="fileList"></div>
+                </div>
+                <textarea name="content" placeholder="Write something..." rows="5"
+                          class="form-control"></textarea>
+                <button type="submit" class="btn btn-light button-sbc mt-2" style="width: 90%;">
+                    Add post
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Список постов -->
+    <div class="posts">
+        <!-- Динамически добавляемые посты -->
+        <div th:each="post : ${posts}"
+             th:replace="~{profile/fragments/post :: postFragment}">
+            <!-- Здесь вставится фрагмент поста -->
+        </div>
+
+        <!-- Пример поста по умолчанию (если нет постов) -->
+        <div th:if="${#lists.isEmpty(posts)}" class="container container-background mx-auto post"
+             style="max-width: 1000px;">
+            <p class="text-center main-text">No posts yet</p>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript для страницы -->
+<th:block layout:fragment="js">
+    <script th:src="@{/js/profile.js}"></script>
+    <script>
+        document.getElementById('createPostButton').addEventListener('click', function() {
+            const form = document.getElementById('postForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        });
+    </script>
+</th:block>
+</html>
+</html>
