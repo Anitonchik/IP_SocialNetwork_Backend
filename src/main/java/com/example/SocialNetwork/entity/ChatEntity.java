@@ -17,11 +17,11 @@ import java.util.List;
     }
 )
 public class ChatEntity extends BaseEntity{
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "first_user_id", nullable = false)
     private UserEntity firstUser;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "second_user_id", nullable = false)
     private UserEntity secondUser;
 

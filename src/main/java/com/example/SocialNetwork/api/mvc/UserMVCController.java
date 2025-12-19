@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.format.DateTimeFormatter;
+
 
 @Controller
 @RequestMapping("/users")
@@ -23,17 +25,39 @@ public class UserMVCController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserChatSession userSession;
+
     Long userId = 1L;
 
     @GetMapping
     public String getAllUsers(
             @RequestParam(defaultValue = "1") @Min(1) int page,
             @RequestParam(defaultValue = "10") @Min(1) int size,
+            @RequestParam(required = false) String search,
             Model model) {
 
         Pageable pageable = PageHelper.toPageable(page, size);
 
         PageRs<UserRs> pageRs = userService.getAll(pageable);
+
+        if (search != null && !search.trim().isEmpty()) {
+            pageRs = userService.searchUsers(search.trim(), pageable);
+            model.addAttribute("searchQuery", search.trim());
+        } else {
+            pageRs = userService.getAll(pageable);
+            model.addAttribute("searchQuery", null);
+        }
+
+        String lastChatUserName = userSession.getLastChatUserName();
+        model.addAttribute("lastChatUserName", lastChatUserName);
+
+        if (userSession != null && userSession.getLastChatVisitTime() != null) {
+            model.addAttribute("lastChatDate",
+                    userSession.getLastChatVisitTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+            model.addAttribute("lastChatTime",
+                    userSession.getLastChatVisitTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+        }
 
         model.addAttribute("users", pageRs.items());
         model.addAttribute("currentPage", page);

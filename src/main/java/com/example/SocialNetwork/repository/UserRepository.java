@@ -2,6 +2,8 @@ package com.example.SocialNetwork.repository;
 
 import com.example.SocialNetwork.entity.Report;
 import com.example.SocialNetwork.entity.UserEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,5 +29,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "GROUP BY  EXTRACT(DAY FROM c.CREATED_AT) " +
             "ORDER BY date", nativeQuery = true)
     List<Report> getUserStatistics(@Param("userId") Long userId);
+
+    Page<UserEntity> findByUserNameContainingIgnoreCase(String userName, Pageable pageable);
 
 }

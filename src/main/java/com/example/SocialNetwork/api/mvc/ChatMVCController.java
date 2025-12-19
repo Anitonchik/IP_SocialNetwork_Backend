@@ -13,10 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class ChatMVCController {
@@ -30,26 +27,36 @@ public class ChatMVCController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserChatSession userSession;
+
     Long userId = 1L;
 
-    // =========== ГЛАВНАЯ СТРАНИЦА ===========
-    @GetMapping("/kskks")
+
+    @GetMapping("/chat")
     public String home(Model model, HttpSession session) {
         return showChat(1L, model, session);
     }
 
-    // =========== ПОКАЗАТЬ ЧАТ ===========
     @GetMapping("/chat/{chatId}")
     public String showChat(@PathVariable Long chatId,
                            Model model,
                            HttpSession session) {
+
+        var chat = chatService.getEntity(chatId);
+        if (!Objects.equals(userId, chat.getFirstUser().getId())) {
+            userSession.setLastChat(chat.getFirstUser().getUserName());
+        }
+        else if (!Objects.equals(userId, chat.getSecondUser().getId())) {
+            userSession.setLastChat(chat.getSecondUser().getUserName());
+        }
+
         return loadChatData(chatId, model, session);
+
     }
 
-    // =========== ОТПРАВИТЬ СООБЩЕНИЕ ===========
-    // ИЗМЕНЕНО: Убрали {chatId} из пути, так как в форме он передается как параметр
     @PostMapping("/chat/send")
-    public String sendMessage(@RequestParam Long chatId, // Получаем из формы
+    public String sendMessage(@RequestParam Long chatId,
                               @RequestParam String messageText,
                               Model model,
                               HttpSession session) {
@@ -60,11 +67,9 @@ public class ChatMVCController {
         return loadChatData(chatId, model, session);
     }
 
-    // =========== РЕДАКТИРОВАТЬ СООБЩЕНИЕ ===========
-    // ИЗМЕНЕНО: Используем POST вместо PUT (так как в форме method="post")
     @PostMapping("/chat/edit/{id}")
-    public String editMessage(@PathVariable("id") Long messageId, // Переименовано для соответствия HTML
-                              @RequestParam Long chatId, // Получаем из формы
+    public String editMessage(@PathVariable("id") Long messageId,
+                              @RequestParam Long chatId,
                               @RequestParam String messageText,
                               Model model,
                               HttpSession session) {
@@ -75,11 +80,9 @@ public class ChatMVCController {
         return loadChatData(chatId, model, session);
     }
 
-    // =========== УДАЛИТЬ СООБЩЕНИЕ ===========
-    // ИЗМЕНЕНО: Путь соответствует HTML форме
     @PostMapping("/chat/delete-message/{id}")
-    public String deleteMessage(@PathVariable("id") Long messageId, // Переименовано для соответствия HTML
-                                @RequestParam Long chatId, // Получаем из формы
+    public String deleteMessage(@PathVariable("id") Long messageId,
+                                @RequestParam Long chatId,
                                 Model model,
                                 HttpSession session) {
 
@@ -87,7 +90,6 @@ public class ChatMVCController {
         return loadChatData(chatId, model, session);
     }
 
-    // =========== ОБЩИЙ МЕТОД ЗАГРУЗКИ ДАННЫХ ===========
     private String loadChatData(Long chatId, Model model, HttpSession session) {
         var chat = chatService.get(chatId, userId);
         var user = userService.getEntity(userId);
@@ -102,7 +104,6 @@ public class ChatMVCController {
         return "chat-window";
     }
 
-    // ... остальные методы (processMessages, shouldShowDate, getMonthShort, formatTime) остаются без изменений
     private List<ProcessedMessage> processMessages(List<MessageRs> messages, UserEntity user) {
         List<ProcessedMessage> processed = new ArrayList<>();
         Date prevDate = null;
@@ -160,44 +161,4 @@ public class ChatMVCController {
         return sdf.format(date);
     }
 
-    // Внутренний класс для обработанных сообщений
-    private static class ProcessedMessage {
-        private Long id;
-        private String messageText;
-        private Date createdAt;
-        private boolean isEdited;
-        private String sender;
-        private int day;
-        private String month;
-        private String time;
-        private boolean showDate;
-
-        // геттеры и сеттеры
-        public Long getId() { return id; }
-        public void setId(Long id) { this.id = id; }
-
-        public String getMessageText() { return messageText; }
-        public void setMessageText(String messageText) { this.messageText = messageText; }
-
-        public Date getCreatedAt() { return createdAt; }
-        public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
-
-        public boolean isEdited() { return isEdited; }
-        public void setEdited(boolean edited) { isEdited = edited; }
-
-        public String getSender() { return sender; }
-        public void setSender(String sender) { this.sender = sender; }
-
-        public int getDay() { return day; }
-        public void setDay(int day) { this.day = day; }
-
-        public String getMonth() { return month; }
-        public void setMonth(String month) { this.month = month; }
-
-        public String getTime() { return time; }
-        public void setTime(String time) { this.time = time; }
-
-        public boolean isShowDate() { return showDate; }
-        public void setShowDate(boolean showDate) { this.showDate = showDate; }
-    }
 }

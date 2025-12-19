@@ -1,6 +1,7 @@
 package com.example.SocialNetwork.service;
 
 import com.example.SocialNetwork.api.PageRs;
+import com.example.SocialNetwork.api.post.PostRs;
 import org.springframework.data.domain.Pageable;
 import com.example.SocialNetwork.error.NotFoundException;
 import com.example.SocialNetwork.api.user.UserRq;
@@ -60,6 +61,12 @@ public class UserService {
         var subscriptions = getEntity(id).getSubscriptions();
         return subscriptions.stream()
                 .anyMatch(subscribedUser -> Objects.equals(subscribedUser.getId(), subscribedUserId));
+    }
+
+    public PageRs<UserRs> searchUsers(String searchQuery, Pageable pageable) {
+        var page = repository.findByUserNameContainingIgnoreCase(searchQuery, pageable);
+        return PageRs.from(repository.findByUserNameContainingIgnoreCase(searchQuery, pageable), UserRs::from);
+
     }
 
     @Transactional(readOnly = true)

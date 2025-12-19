@@ -4,147 +4,252 @@
     <meta charset="UTF-8">
     <title>Пользователи</title>
 
-    <!-- Bootstrap CSS через CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/styles.css}">
+
+    <script>
+        function writeToUser() {
+            window.location.href = `/chat`;
+        }
+    </script>
 </head>
 <body class="background">
 <nav class="navbar navbar-light bg-light mb-4">
     <div class="container">
         <a class="navbar-brand" href="/">Социальная сеть</a>
         <span class="navbar-text">
-                Страница: <span th:text="${currentPage}">1</span> из <span th:text="${totalPages}">1</span>
-            </span>
+            Страница: <span th:text="${currentPage}">1</span> из <span th:text="${totalPages}">1</span>
+        </span>
+        <!--<a>Последний посещаемый чат: </a>-->
+
+        <div class="sub-text">
+            <div>
+                <div class="d-flex flex-row gap-5">
+                    <p>Имя пользователя </p>
+                    <p th:text="${lastChatUserName}"></p>
+                </div>
+
+                <p th:text="${lastChatTime}"></p>
+            </div>
+        </div>
     </div>
 </nav>
 
-<div class="container d-flex justify-content-between align-items-center p-2 gap-5 mt-0 mb-0">
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Поиск пользователей</h5>
+                    <form id="searchForm" class="d-flex gap-2" onsubmit="searchUsers(event)">
+                        <div class="flex-grow-1">
+                            <input type="text"
+                                   class="form-control"
+                                   id="searchInput"
+                                   name="search"
+                                   placeholder="Введите имя пользователя..."
+                                   th:value="${searchQuery != null ? searchQuery : ''}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i> Найти
+                        </button>
+                        <button type="button"
+                                class="btn btn-outline-secondary"
+                                onclick="clearSearch()"
+                                th:if="${searchQuery != null}">
+                            Очистить
+                        </button>
+                    </form>
 
-    <!-- Список пользователей -->
-    <div id="usersContainer">
-        <div th:each="user : ${users}" class="d-flex align-items-center profile-message container container-background"
-        style="width: 1000px; padding: 10px 10px 10px 10px">
-           <!-- <div class="d-flex align-items-center profile-message">-->
-                <img th:src="${user.userAvatarURL ?: '/static/default-avatar.png'}"
-                     class="profile"
-                     alt="Аватар">
-                <div class="main-text justify-content-center mb-1" th:text="${user.userName}"></div>
-
+                </div>
+            </div>
         </div>
     </div>
 
+    <div th:if="${searchQuery != null}" class="alert alert-info mb-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <span>
+                Результаты поиска по запросу: "<strong th:text="${searchQuery}"></strong>"
+                <span class="text-muted ms-2">
+                    Найдено: <span th:text="${totalItems}">0</span> пользователей
+                </span>
+            </span>
+            <a href="/users" class="btn btn-sm btn-outline-secondary">Показать всех</a>
+        </div>
+    </div>
 
-    <!-- Традиционная пагинация (номера страниц) -->
-    <div th:if="${totalPages > 1}" class="pagination-container">
+    <div id="loadingSpinner" class="text-center my-4" style="display: none;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Загрузка...</span>
+        </div>
+        <p class="mt-2 text-muted">Загрузка...</p>
+    </div>
+
+    <div id="usersContainer">
+        <div th:each="user : ${users}" class="d-flex align-items-center profile-message container container-background mb-2"
+             style="width: 100%; padding: 10px;">
+            <img th:src="${user.userAvatarURL ?: '/static/default-avatar.png'}"
+                 class="profile me-3"
+                 alt="Аватар"
+                 style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+            <div class="main-text justify-content-center mb-1" th:text="${user.userName}"></div>
+
+            <div class="ms-auto">
+                <button class="btn btn-outline-primary btn-sm me-2"
+                        onclick="writeToUser()">
+                    Написать
+                </button>
+                <button class="btn btn-outline-secondary btn-sm"
+                        onclick="viewProfile([[${user.id}]])">
+                    Профиль
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${users.empty}" class="text-center mt-5">
+        <div class="alert alert-warning">
+            <h4>Пользователи не найдены</h4>
+            <p th:if="${searchQuery != null}">
+                Попробуйте изменить запрос поиска
+            </p>
+            <p th:unless="${searchQuery != null}">
+                В системе пока нет пользователей
+            </p>
+        </div>
+    </div>
+
+    <div th:if="${totalPages > 1}" class="pagination-container mt-4">
         <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
-                <!-- Кнопка "Назад" -->
                 <li class="page-item" th:classappend="${!hasPrevious} ? 'disabled' : ''">
                     <a class="page-link"
-                       th:href="${hasPrevious} ? @{/users(page=${currentPage - 1}, size=${pageSize})} : '#'">
+                       th:href="${hasPrevious} ? buildPageUrl(${currentPage - 1}, ${pageSize}, ${searchQuery}) : '#'">
                         Назад
                     </a>
                 </li>
 
-                <!-- Номера страниц -->
                 <li th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
                     class="page-item"
                     th:classappend="${pageNum == currentPage} ? 'active' : ''">
                     <a class="page-link"
-                       th:href="@{/users(page=${pageNum}, size=${pageSize})}"
+                       th:href="buildPageUrl(${pageNum}, ${pageSize}, ${searchQuery})"
                        th:text="${pageNum}">
                         1
                     </a>
                 </li>
 
-                <!-- Кнопка "Вперед" -->
                 <li class="page-item" th:classappend="${!hasNext} ? 'disabled' : ''">
                     <a class="page-link"
-                       th:href="${hasNext} ? @{/users(page=${currentPage + 1}, size=${pageSize})} : '#'">
+                       th:href="${hasNext} ? buildPageUrl(${currentPage + 1}, ${pageSize}, ${searchQuery}) : '#'">
                         Вперед
                     </a>
                 </li>
             </ul>
         </nav>
 
-        <!-- Выбор размера страницы -->
         <div class="text-center mt-3">
             <small class="text-muted">Показывать по:</small>
             <div class="btn-group btn-group-sm ms-2">
                 <a th:each="sizeOption : ${[5, 10, 20, 50]}"
                    class="btn btn-outline-secondary"
                    th:classappend="${size == sizeOption} ? 'active' : ''"
-                   th:href="@{/users(page=1, size=${sizeOption})}"
+                   th:href="buildPageUrl(1, ${sizeOption}, ${searchQuery})"
                    th:text="${sizeOption}">
                     10
                 </a>
             </div>
         </div>
     </div>
-
-    <!-- Сообщение, если пользователей нет -->
-    <div th:if="${users.empty}" class="text-center mt-5">
-        <div class="alert alert-warning">
-            <i class="bi bi-people h1"></i>
-            <h4>Пользователи не найдены</h4>
-        </div>
-    </div>
 </div>
 
-<!-- JavaScript для бесконечного скролла (как в React) -->
 <script>
     // Данные из Thymeleaf
     const currentPage = [[${currentPage}]];
     const totalPages = [[${totalPages}]];
-    const nextPage = [[${nextPage}]];
-    const isLastPage = [[${isLastPage}]];
     const pageSize = [[${pageSize}]];
+    const searchQuery = [[${searchQuery}]];
 
     let isFetching = false;
 
-    // Обработчик скролла
-    function scrollHandler() {
-        // Проверяем, доскролили ли до конца страницы
-        const scrollHeight = document.documentElement.scrollHeight;
-        const scrollTop = document.documentElement.scrollTop;
-        const clientHeight = document.documentElement.clientHeight;
+    // Функция для построения URL с учетом поиска
+    function buildPageUrl(page, size, search) {
+        let url = `/users?page=${page}&size=${size}`;
+        if (search && search !== 'null') {
+            url += `&search=${encodeURIComponent(search)}`;
+        }
+        return url;
+    }
 
-        // Если до конца осталось меньше 100px и не последняя страница
-        if ((scrollHeight - (scrollTop + clientHeight) < 100)
-            && !isFetching
-            && !isLastPage) {
+    // Поиск пользователей
+    function searchUsers(event) {
+        event.preventDefault();
+        const searchInput = document.getElementById('searchInput');
+        const searchValue = searchInput.value.trim();
 
-            loadMoreUsers();
+        if (searchValue) {
+            window.location.href = `/users?page=1&size=${pageSize}&search=${encodeURIComponent(searchValue)}`;
+        } else {
+            window.location.href = `/users?page=1&size=${pageSize}`;
         }
     }
 
-    // Загрузка следующих пользователей
-    async function loadMoreUsers() {
-        if (isFetching || isLastPage) return;
+    // Быстрый поиск по первой букве
+    function quickSearch(letter) {
+        window.location.href = `/users?page=1&size=${pageSize}&search=${encodeURIComponent(letter)}`;
+    }
+
+    // Очистка поиска
+    function clearSearch() {
+        window.location.href = `/users?page=1&size=${pageSize}`;
+    }
+
+    // Написать пользователю
+    function writeToUser() {
+        // Реализация отправки сообщения
+        console.log('Написать пользователю с ID');
+        return "chat";
+    }
+
+    // Просмотр профиля
+    function viewProfile(userId) {
+        window.location.href = `/profile/${userId}`;
+    }
+
+    // Загрузка следующих пользователей (бесконечный скролл)
+    function loadMoreUsers() {
+        if (isFetching) return;
+
+        const nextPage = currentPage + 1;
+        if (nextPage > totalPages) return;
 
         isFetching = true;
         document.getElementById('loadingSpinner').style.display = 'block';
 
-        try {
-            // AJAX запрос на сервер
-            const response = await fetch(`/api/users/more?page=${nextPage}&size=${pageSize}`);
-            const data = await response.json();
-
-            // Добавляем новых пользователей в DOM
-            appendUsers(data.items);
-
-            // Обновляем данные пагинации
-            updatePagination(data);
-
-        } catch (error) {
-            console.error('Ошибка загрузки пользователей:', error);
-        } finally {
-            isFetching = false;
-            document.getElementById('loadingSpinner').style.display = 'none';
+        let url = `/api/users/more?page=${nextPage}&size=${pageSize}`;
+        if (searchQuery && searchQuery !== 'null') {
+            url += `&search=${encodeURIComponent(searchQuery)}`;
         }
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.items && data.items.length > 0) {
+                    appendUsers(data.items);
+                    currentPage = data.currentPage;
+                    totalPages = data.totalPages;
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки пользователей:', error);
+            })
+            .finally(() => {
+                isFetching = false;
+                document.getElementById('loadingSpinner').style.display = 'none';
+            });
     }
 
     // Добавление пользователей в DOM
@@ -152,47 +257,78 @@
         const container = document.getElementById('usersContainer');
 
         users.forEach(user => {
-            const userCard = `
-                <div class="user-card">
-                    <div class="d-flex align-items-center">
-                        <img src="${user.userAvatarURL || '/static/default-avatar.png'}"
-                             class="user-avatar me-3"
-                             alt="Аватар">
-                        <div class="flex-grow-1">
-                            <h5 class="mb-1">${user.userName}</h5>
-                            <p class="text-muted mb-1">${user.email}</p>
-                            <small class="text-muted">
-                                Зарегистрирован: ${new Date(user.createdAt).toLocaleDateString()}
-                            </small>
-                        </div>
-                        <div>
-                            <button class="btn btn-outline-primary btn-sm">Написать</button>
-                        </div>
-                    </div>
+            const userDiv = document.createElement('div');
+            userDiv.className = 'd-flex align-items-center profile-message container container-background mb-2';
+            userDiv.style.cssText = 'width: 100%; padding: 10px;';
+
+            userDiv.innerHTML = `
+                <img src="${user.userAvatarURL || '/static/default-avatar.png'}"
+                     class="profile me-3"
+                     alt="Аватар"
+                     style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                <div class="main-text justify-content-center mb-1">${user.userName}</div>
+                <div class="ms-auto">
+                    <button class="btn btn-outline-primary btn-sm me-2"
+                            onclick="writeToUser(${user.id})">
+                        Написать
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm"
+                            onclick="viewProfile(${user.id})">
+                        Профиль
+                    </button>
                 </div>
             `;
-            container.insertAdjacentHTML('beforeend', userCard);
+
+            container.appendChild(userDiv);
         });
     }
 
-    // Обновление данных пагинации
-    function updatePagination(data) {
-        window.nextPage = data.hasNext ? window.nextPage + 1 : window.nextPage;
-        window.isLastPage = !data.hasNext;
+    // Обработчик скролла для бесконечной загрузки
+    function scrollHandler() {
+        const scrollHeight = document.documentElement.scrollHeight;
+        const scrollTop = document.documentElement.scrollTop;
+        const clientHeight = document.documentElement.clientHeight;
+
+        if ((scrollHeight - (scrollTop + clientHeight) < 100) && !isFetching) {
+            loadMoreUsers();
+        }
     }
 
-    // Инициализация скролла
+    // Инициализация
     document.addEventListener('DOMContentLoaded', function() {
+        // Фокус на поле поиска
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput && !searchInput.value) {
+            searchInput.focus();
+        }
+
+        // Добавляем обработчик скролла
         window.addEventListener('scroll', scrollHandler);
+
+        // Автопоиск при вводе (опционально)
+        let searchTimeout;
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                if (this.value.length >= 2) {
+                    searchUsers(new Event('submit'));
+                }
+            }, 500);
+        });
     });
 
-    // Очистка при размонтировании
+    // Очистка
     window.addEventListener('beforeunload', function() {
         window.removeEventListener('scroll', scrollHandler);
     });
 </script>
 
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 <!-- Bootstrap JS -->
-<script src="/webjars/bootstrap/5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
 </html>
