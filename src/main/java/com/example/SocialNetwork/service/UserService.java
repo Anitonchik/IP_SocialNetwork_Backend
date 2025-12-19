@@ -33,7 +33,8 @@ public class UserService {
         });
     }
 
-    @Transactional(propagation = Propagation.MANDATORY)
+    //@Transactional(propagation = Propagation.MANDATORY)
+    @Transactional(readOnly = true)
     public UserEntity getEntity(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(UserEntity.class, id));

@@ -11,10 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcWebConfiguration implements WebMvcConfigurer {
     @Override
     public void addViewControllers(@NonNull ViewControllerRegistry registry) {
-        // Если не нужны данные из глобального контроллера
-        registry.addViewController("/posts").setViewName("posts");
-        registry.addViewController("/chats").setViewName("chats");
+        registry.addRedirectViewController("/", "/chat");
 
-        registry.addRedirectViewController("/", "/posts");
     }
 }

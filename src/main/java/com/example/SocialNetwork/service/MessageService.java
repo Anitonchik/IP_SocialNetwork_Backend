@@ -79,6 +79,7 @@ public class MessageService {
         return MessageRs.from(entity);
     }
 
+    @Transactional
     public MessageRs delete(Long id) {
         final MessageEntity entity = getEntity(id);
         repository.delete(entity);
