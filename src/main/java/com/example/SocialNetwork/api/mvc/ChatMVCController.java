@@ -33,7 +33,7 @@ public class ChatMVCController {
     Long userId = 1L;
 
     // =========== ГЛАВНАЯ СТРАНИЦА ===========
-    @GetMapping("/")
+    @GetMapping("/kskks")
     public String home(Model model, HttpSession session) {
         return showChat(1L, model, session);
     }

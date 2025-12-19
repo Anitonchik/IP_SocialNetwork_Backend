@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcWebConfiguration implements WebMvcConfigurer {
     @Override
     public void addViewControllers(@NonNull ViewControllerRegistry registry) {
-        registry.addRedirectViewController("/", "/chat");
+        registry.addRedirectViewController("/", "/users");
 
     }
 }
