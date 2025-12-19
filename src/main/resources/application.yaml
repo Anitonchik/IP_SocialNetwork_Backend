@@ -4,7 +4,7 @@ spring:
   application:
     name: IP_SocialNetwork_Backend
   profiles:
-    active: front
+    active: dev
   jpa:
     hibernate:
       ddl-auto: validate

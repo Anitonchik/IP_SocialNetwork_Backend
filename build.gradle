@@ -32,10 +32,13 @@ repositories {
 
 ext {
     springdocVersion = "2.8.11"
+    thymeleafLayoutVersion = "3.4.0"
     h2Version = "2.4.240"
     postgresVersion = "42.7.8"
     liquibaseVersion = "4.33.0"
     mockitoVersion = "5.19.0"
+    bootstrapVersion = "5.3.3"
+    bootstrapIconsVersion = "1.11.3"
 
     springProfiles = []
     if (project.hasProperty("front")) {
