@@ -30,7 +30,7 @@ public class SocialNetworkApplication implements CommandLineRunner {
     }
 
 	private void populateData(){
-		final var user1 = userService.create(new UserRq("fN", "lN", "ooop", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaU6TxrGCihlR0z8AtG6hqjUnXbmXP1jlPQA&s",
+		/*final var user1 = userService.create(new UserRq("fN", "lN", "ooop", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaU6TxrGCihlR0z8AtG6hqjUnXbmXP1jlPQA&s",
 				"desc", "+7 (999) 999-99-99"));
 		final var user2 = userService.create(new UserRq("fN", "lN", "pp", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMXNoPlWCGr5Bq21PgyZ8qdPMn33QwISRp5g&s",
 				"desc", "+7 (999) 999-99-98"));
@@ -79,7 +79,7 @@ public class SocialNetworkApplication implements CommandLineRunner {
 		final var message6 = messageService.create(new MessageRq(chat2.id(), user1.id(), "sbvmmbm", new Date()));
 		final var message7 = messageService.create(new MessageRq(chat2.id(), user1.id(), "[sdobj", new Date()));
 		final var message8 = messageService.create(new MessageRq(chat3.id(), user1.id(), "apfiuvhapfiuvh", new Date()));
-
+*/
 	}
 
     public static void main(String[] args) {

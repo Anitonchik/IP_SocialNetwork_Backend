@@ -39,6 +39,7 @@ ext {
     thymeleafLayoutVersion = "3.4.0"
     bootstrapVersion = "5.3.3"
     bootstrapIconsVersion = "1.11.1"
+    jjwtVersion = "0.13.0"
 
     springProfiles = []
     if (project.hasProperty("front")) {
@@ -68,25 +69,10 @@ if (springProfiles.contains("dev")) {
 dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-validation"
-    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
 
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
     runtimeOnly "org.liquibase:liquibase-core:${liquibaseVersion}"
 
-    implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
-    implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:${thymeleafLayoutVersion}"
-    developmentOnly "org.springframework.boot:spring-boot-devtools"
-    implementation "org.webjars:bootstrap:${bootstrapVersion}"
-    if (!springProfiles.contains("front")) {
-        implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
-        implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:${thymeleafLayoutVersion}"
-        developmentOnly "org.springframework.boot:spring-boot-devtools"
-        runtimeOnly "org.webjars.npm:bootstrap:${bootstrapVersion}"
-        runtimeOnly "org.webjars.npm:bootstrap-icons:${bootstrapIconsVersion}"
-
-    } else {
-        implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
-    }
     if (springProfiles.contains("prod")) {
         runtimeOnly "org.postgresql:postgresql:${postgresVersion}"
     } else {
@@ -94,7 +80,25 @@ dependencies {
         runtimeOnly "com.h2database:h2:${h2Version}"
     }
 
+    if (!springProfiles.contains("front")) {
+        implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+        implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:${thymeleafLayoutVersion}"
+        developmentOnly "org.springframework.boot:spring-boot-devtools"
+        runtimeOnly "org.webjars.npm:bootstrap:${bootstrapVersion}"
+        runtimeOnly "org.webjars.npm:bootstrap-icons:${bootstrapIconsVersion}"
+
+        implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity6"
+    } else {
+        runtimeOnly "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+        runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
+    }
+
+    implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
+
+    implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-aop"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"

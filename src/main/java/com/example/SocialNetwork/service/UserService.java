@@ -10,6 +10,8 @@ import com.example.SocialNetwork.entity.Report;
 import com.example.SocialNetwork.entity.UserEntity;
 import com.example.SocialNetwork.error.AlreadyExistsException;
 import com.example.SocialNetwork.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;

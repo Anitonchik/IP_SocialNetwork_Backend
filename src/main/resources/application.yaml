@@ -4,7 +4,7 @@ spring:
   application:
     name: IP_SocialNetwork_Backend
   profiles:
-    active: dev
+    active: front
   jpa:
     hibernate:
       ddl-auto: validate
@@ -13,6 +13,12 @@ spring:
     enabled: true
     drop-first: false
     change-log: classpath:db/master.yml
+  security:
+    user:
+      name:
+        test
+      password:
+        12345678
 server:
   port: 8080
 

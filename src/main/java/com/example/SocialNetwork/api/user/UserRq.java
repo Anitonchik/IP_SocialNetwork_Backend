@@ -11,5 +11,7 @@ public record UserRq (@NotBlank @Size(min = 1, max = 50, message = "FirstName mu
                       @Pattern(
                               regexp = "^(\\+7|8)\\s?\\(?\\d{3}\\)?\\s?\\d{3}\\s?\\d{2}\\s?\\d{2}$",
                               message = "Invalid phone number format. Expected format: +7 (XXX) XXX-XX-XX or 8 (XXX) XXX-XX-XX"
-                      ) String phone) {
+                      ) String phone,
+                      @NotBlank @Size(min = 3) String password,
+                      @NotBlank @Size(min = 3) String passwordConfirm) {
 }

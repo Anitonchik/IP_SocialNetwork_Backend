@@ -22,6 +22,8 @@ public class UserEntity extends BaseEntity{
     private String pageAddress;
     @Column(nullable = false, unique = true)
     private String phone;
+    @Column(nullable = false, unique = true)
+    private String password;
 
     @ManyToMany
     @JoinTable(
@@ -102,6 +104,14 @@ public class UserEntity extends BaseEntity{
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<UserEntity> getFollowers() {
