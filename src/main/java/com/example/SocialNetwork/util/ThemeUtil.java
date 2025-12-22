@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 
-/*@Profile("!front")
+@Profile("!front")
 @Controller
 class ThemeUtil {
-    private final WebHelper webHelper;
+    /*private final WebHelper webHelper;
 
     public ThemeUtil(WebHelper webHelper) {
         this.webHelper = webHelper;
@@ -25,5 +25,5 @@ class ThemeUtil {
 
     public String getTheme() {
         return webHelper.getCookie(THEME_COOKIE, THEME_DEFAULT);
-    }
-}*/
+    }*/
+}

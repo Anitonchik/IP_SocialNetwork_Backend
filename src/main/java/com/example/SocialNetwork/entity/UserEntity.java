@@ -46,7 +46,7 @@ public class UserEntity extends BaseEntity{
     public UserEntity(){super();}
 
     public UserEntity (String firstName, String lastName, String userName, String userAvatarURL,
-                    String userDescription, String pageAddress, String phone) {
+                    String userDescription, String pageAddress, String phone, String password) {
         this();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -55,6 +55,7 @@ public class UserEntity extends BaseEntity{
         this.userDescription = userDescription;
         this.pageAddress = pageAddress;
         this.phone = phone;
+        this.password = password;
         this.followers = new ArrayList<>();
         this.subscriptions = new ArrayList<>();
     }

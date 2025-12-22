@@ -82,7 +82,7 @@ public class UserService {
         checkUserNameAndPhone(dto.userName(), dto.phone());
         UserEntity entity = new UserEntity(dto.firstName(), dto.lastName(),
                 dto.userName(), dto.userAvatarURL(), dto.userDescription(),
-                "http://" + dto.userName(), dto.phone());
+                "http://" + dto.userName(), dto.phone(), dto.password());
         entity = repository.save(entity);
         return UserRs.from(entity);
     }

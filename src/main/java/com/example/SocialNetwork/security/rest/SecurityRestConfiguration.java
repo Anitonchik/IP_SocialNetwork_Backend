@@ -27,8 +27,13 @@ public class SecurityRestConfiguration {
 
     public static final List<String> WHITELISTED_URLS = List.of(
             "/index.html",
+            "/icon.svg",
+            "/app/**",
+            "/assets/*",
+            "/images/*",
             "/swagger-ui.html",
-            "/swagger-ui/**");
+            "/swagger-ui/**",
+            "/v3/api-docs/**");
 
     @Bean
     SecurityFilterChain filterChain(
@@ -46,11 +51,24 @@ public class SecurityRestConfiguration {
         httpSecurity.sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        httpSecurity.headers(headers -> headers
+                .frameOptions(frame -> frame.disable())
+        );
+
+
         httpSecurity.authorizeHttpRequests(requests -> requests
                 .requestMatchers("/").permitAll()
                 .requestMatchers(WHITELISTED_URLS.toArray(new String[0])).permitAll());
 
+        /*httpSecurity.authorizeHttpRequests(requests -> requests
+                .requestMatchers(HttpMethod.POST, AuthController.URL + Constants.SIGNUP_URL).anonymous()
+                .requestMatchers(HttpMethod.POST, AuthController.URL + Constants.LOGIN_URL).anonymous()
+                .requestMatchers(Constants.API_URL + "/**").authenticated()
+                .anyRequest().denyAll());*/
+
+        // тут поменяла пока
         httpSecurity.authorizeHttpRequests(requests -> requests
+                .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers(HttpMethod.POST, AuthController.URL + Constants.SIGNUP_URL).anonymous()
                 .requestMatchers(HttpMethod.POST, AuthController.URL + Constants.LOGIN_URL).anonymous()
                 .requestMatchers(Constants.API_URL + "/**").authenticated()

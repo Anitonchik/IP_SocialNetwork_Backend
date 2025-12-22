@@ -30,9 +30,9 @@ public class SocialNetworkApplication implements CommandLineRunner {
     }
 
 	private void populateData(){
-		/*final var user1 = userService.create(new UserRq("fN", "lN", "ooop", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaU6TxrGCihlR0z8AtG6hqjUnXbmXP1jlPQA&s",
-				"desc", "+7 (999) 999-99-99"));
-		final var user2 = userService.create(new UserRq("fN", "lN", "pp", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMXNoPlWCGr5Bq21PgyZ8qdPMn33QwISRp5g&s",
+		 final var user1 = userService.create(new UserRq("fN", "lN", "ooop", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaU6TxrGCihlR0z8AtG6hqjUnXbmXP1jlPQA&s",
+				"desc", "+7 (999) 999-99-99", "string", "string"));
+		/*final var user2 = userService.create(new UserRq("fN", "lN", "pp", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMXNoPlWCGr5Bq21PgyZ8qdPMn33QwISRp5g&s",
 				"desc", "+7 (999) 999-99-98"));
 		final var user3 = userService.create(new UserRq("fN", "lN", "asdfh", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSu3iRu_bfAoSNyQySyiVOh8uHrAdJX5BkrA&s",
 				"desc", "+7 (999) 999-99-97"));
@@ -89,7 +89,7 @@ public class SocialNetworkApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		//populateData();
+		populateData();
 		if (args.length == 0) {
 			return;
 		}

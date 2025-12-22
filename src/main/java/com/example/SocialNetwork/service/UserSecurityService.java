@@ -8,10 +8,11 @@ import com.example.SocialNetwork.security.UserPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-
+@Service
 public class UserSecurityService implements UserDetailsService {
     final private UserRepository repository;
 
