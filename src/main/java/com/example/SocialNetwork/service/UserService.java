@@ -88,6 +88,12 @@ public class UserService {
         return UserRs.from(entity);
     }
 
+    @Transactional(readOnly = true)
+    public UserEntity getBuUserName(String userName) {
+        final UserEntity entity = repository.findByUserName(userName).get();
+        return entity;
+    }
+
     @Transactional
     public UserRs create(UserRq dto) {
         checkUserNameAndPhone(dto.userName(), dto.phone());

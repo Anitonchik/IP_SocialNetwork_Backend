@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
-                        // Открыть явно указанные пути
+
                         .requestMatchers(
                                 Constants.LOGIN_URL,
                                 Constants.SIGNUP_URL,
