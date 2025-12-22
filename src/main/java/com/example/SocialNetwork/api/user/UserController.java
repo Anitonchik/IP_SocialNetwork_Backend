@@ -28,6 +28,9 @@ public class UserController {
         return userService.getAll(PageHelper.toPageable(page, size));
     }
 
+    @PostMapping
+    public UserRs create(@RequestBody @Valid UserRq dto) {return userService.create(dto);}
+
     @GetMapping("/{id}")
     public UserRs get(@PathVariable Long id) {
         return userService.get(id);
