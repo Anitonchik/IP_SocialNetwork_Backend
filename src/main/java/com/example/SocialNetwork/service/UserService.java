@@ -2,6 +2,7 @@ package com.example.SocialNetwork.service;
 
 import com.example.SocialNetwork.api.PageRs;
 import com.example.SocialNetwork.api.post.PostRs;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import com.example.SocialNetwork.error.NotFoundException;
 import com.example.SocialNetwork.api.user.UserRq;
@@ -10,6 +11,7 @@ import com.example.SocialNetwork.entity.Report;
 import com.example.SocialNetwork.entity.UserEntity;
 import com.example.SocialNetwork.error.AlreadyExistsException;
 import com.example.SocialNetwork.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ import java.util.Objects;
 @Service
 public class UserService {
     final private UserRepository repository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository repository) {
         this.repository = repository;
@@ -39,6 +44,14 @@ public class UserService {
     public UserEntity getEntity(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(UserEntity.class, id));
+    }
+
+    public void register(UserRq dto) {
+        UserEntity entity = new UserEntity(dto.firstName(), dto.lastName(),
+                dto.userName(), dto.userAvatarURL(), dto.userDescription(),
+                "http://" + dto.userName(), dto.phone(), passwordEncoder.encode(dto.password()));
+
+        repository.save(entity);
     }
 
     @Transactional(readOnly = true)
@@ -80,7 +93,7 @@ public class UserService {
         checkUserNameAndPhone(dto.userName(), dto.phone());
         UserEntity entity = new UserEntity(dto.firstName(), dto.lastName(),
                 dto.userName(), dto.userAvatarURL(), dto.userDescription(),
-                "http://" + dto.userName(), dto.phone());
+                "http://" + dto.userName(), dto.phone(), passwordEncoder.encode(dto.password()));
         entity = repository.save(entity);
         return UserRs.from(entity);
     }
@@ -95,6 +108,7 @@ public class UserService {
         entity.setUserAvatarURL(dto.userAvatarURL());
         entity.setUserDescription(dto.userDescription());
         entity.setPhone(dto.phone());
+        entity.setPassword(dto.password());
         entity = repository.save(entity);
         return UserRs.from(entity);
     }

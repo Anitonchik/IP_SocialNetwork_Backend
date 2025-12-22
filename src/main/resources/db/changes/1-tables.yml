@@ -66,6 +66,12 @@ databaseChangeLog:
                     nullable: false
                     unique: true
 
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
   # посты
   - changeSet:
       id: create-posts-table
