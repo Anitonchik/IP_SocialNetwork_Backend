@@ -28,6 +28,36 @@ public class UserController {
         return userService.getAll(PageHelper.toPageable(page, size));
     }
 
+    @GetMapping("/users")
+    public PageRs<UserRs> getAllWhithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                 @RequestParam(defaultValue = "10") @Min(1) int size,
+                                                 @RequestParam Long userId) {
+        return userService.getAllNotByAuthUser(PageHelper.toPageable(page, size), userId);
+    }
+
+    @GetMapping("/users/filter")
+    public PageRs<UserRs> getFilterWhithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                                 @RequestParam(defaultValue = "10") @Min(1) int size,
+                                                 @RequestParam String userNamePart,
+                                                 @RequestParam Long userId) {
+        return userService.getFilterNotByAuthUser(PageHelper.toPageable(page, size), userNamePart, userId);
+    }
+
+    @GetMapping("/users/sort")
+    public PageRs<UserRs> getSortWhithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                                    @RequestParam(defaultValue = "10") @Min(1) int size,
+                                                    @RequestParam Long userId) {
+        return userService.getFilterSortNotByAuthUser(PageHelper.toPageable(page, size), userId);
+    }
+
+    @GetMapping("/users/sort/filter")
+    public PageRs<UserRs> getSortFilterWhithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                                  @RequestParam(defaultValue = "10") @Min(1) int size,
+                                                  @RequestParam(defaultValue = "") String userNamePart,
+                                                  @RequestParam Long userId) {
+        return userService.getFilterSortFilterNotByAuthUser(PageHelper.toPageable(page, size), userNamePart, userId);
+    }
+
     @PostMapping
     public UserRs create(@RequestBody @Valid UserRq dto) {return userService.create(dto);}
 

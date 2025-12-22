@@ -15,6 +15,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByUserName(String userName);
     Optional<UserEntity> findByPhone(String phone);
+    Page<UserEntity> findByIdNot(Pageable pageable, Long userId);
 
     /*@Query("SELECT c.createdAt as date, " +
             "COUNT(*) as chatCount " +
@@ -32,4 +33,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Page<UserEntity> findByUserNameContainingIgnoreCase(String userName, Pageable pageable);
 
+    Page<UserEntity> findByUserNameContainingIgnoreCaseAndIdNot(String usernamePart, Long userAuthId, Pageable pageable);
+    Page<UserEntity> findByUserNameContainingIgnoreCaseAndIdNotOrderByUserNameAsc(String usernamePart, Long userAuthId, Pageable pageable);
+    Page<UserEntity> findByIdNotOrderByUserNameAsc(Long userAuthId, Pageable pageable);
 }

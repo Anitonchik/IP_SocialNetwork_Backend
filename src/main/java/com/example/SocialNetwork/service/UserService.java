@@ -60,6 +60,28 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public PageRs<UserRs> getAllNotByAuthUser(Pageable pageable, Long userId) {
+        return PageRs.from(repository.findByIdNot(pageable, userId), UserRs::from);
+    }
+
+    @Transactional(readOnly = true)
+    public PageRs<UserRs> getFilterNotByAuthUser(Pageable pageable, String usernamePart, Long userAuthId) {
+        return PageRs.from(repository.findByUserNameContainingIgnoreCaseAndIdNot(usernamePart, userAuthId, pageable), UserRs::from);
+    }
+
+    @Transactional(readOnly = true)
+    public PageRs<UserRs> getFilterSortNotByAuthUser(Pageable pageable, Long userAuthId) {
+        return PageRs.from(repository.findByIdNotOrderByUserNameAsc(userAuthId, pageable), UserRs::from);
+    }
+
+
+    @Transactional(readOnly = true)
+    public PageRs<UserRs> getFilterSortFilterNotByAuthUser(Pageable pageable, String usernamePart, Long userAuthId) {
+        return PageRs.from(repository.findByUserNameContainingIgnoreCaseAndIdNotOrderByUserNameAsc(usernamePart, userAuthId, pageable), UserRs::from);
+    }
+
+
+    @Transactional(readOnly = true)
     public List<UserRs> getFollowers(Long id) {
         return UserRs.fromList(getEntity(id).getFollowers());
     }
