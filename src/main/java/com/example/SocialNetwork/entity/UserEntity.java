@@ -1,6 +1,7 @@
 package com.example.SocialNetwork.entity;
 
 import jakarta.persistence.*;
+import org.apache.catalina.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,8 @@ public class UserEntity extends BaseEntity{
     private String phone;
     @Column(nullable = false)
     private String password;
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole = UserRole.USER;
 
     @ManyToMany
     @JoinTable(
@@ -56,6 +59,7 @@ public class UserEntity extends BaseEntity{
         this.pageAddress = pageAddress;
         this.phone = phone;
         this.password = password;
+        this.userRole = UserRole.USER;
         this.followers = new ArrayList<>();
         this.subscriptions = new ArrayList<>();
     }
@@ -113,6 +117,14 @@ public class UserEntity extends BaseEntity{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public void setPassword(UserRole userRole) {
+        this.userRole = userRole;
     }
 
     public List<UserEntity> getFollowers() {

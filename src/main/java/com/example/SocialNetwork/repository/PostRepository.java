@@ -10,4 +10,5 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<PostEntity, Long> {
     Page<PostEntity> findByUser_IdOrderByIdDesc(Pageable pageable, Long userId);
     Page<PostEntity> findByUser_IdNotOrderByIdDesc(Pageable pageable, Long userId);
+    void deleteAllByUser_Id(Long userId);
 }

@@ -75,6 +75,7 @@ public class MessageService {
         entity.setUser(user);
         entity.setMessageText(dto.messageText());
         entity.setCreatedAt(dto.createdAt());
+        entity.setIsEdited(true);
         entity = repository.save(entity);
         return MessageRs.from(entity);
     }

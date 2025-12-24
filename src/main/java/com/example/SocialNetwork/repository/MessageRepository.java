@@ -10,4 +10,5 @@ import java.util.Optional;
 
 public interface MessageRepository extends JpaRepository<MessageEntity, Long> {
     List<MessageEntity> findByChat_Id(Long chatId);
+    void deleteAllByChat_Id(Long chatId);
 }

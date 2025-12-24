@@ -2,6 +2,7 @@ package com.example.SocialNetwork.service;
 
 import com.example.SocialNetwork.api.PageRs;
 import com.example.SocialNetwork.api.post.PostRs;
+import com.example.SocialNetwork.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import com.example.SocialNetwork.error.NotFoundException;
@@ -22,6 +23,12 @@ import java.util.Objects;
 @Service
 public class UserService {
     final private UserRepository repository;
+
+    @Autowired
+    private ChatService chatService;
+
+    @Autowired
+    private PostRepository postRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -165,6 +172,8 @@ public class UserService {
     @Transactional
     public UserRs delete(Long id) {
         final UserEntity entity = getEntity(id);
+        chatService.deleteChatsByUserId(id);
+        postRepository.deleteAllByUser_Id(entity.getId());
         repository.delete(entity);
         return UserRs.from(entity);
     }

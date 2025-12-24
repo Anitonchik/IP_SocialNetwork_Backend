@@ -44,7 +44,7 @@ public class AuthService {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         String jwt = jwtService.generateToken(userDetails);
-        return new UserJWTRs(jwt, userEntity.getId());
+        return new UserJWTRs(jwt, userEntity.getId(), userEntity.getUserRole().toString());
     }
 
     public UserJWTRs register(UserRq user) {

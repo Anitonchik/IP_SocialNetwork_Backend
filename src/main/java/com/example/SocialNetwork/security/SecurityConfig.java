@@ -1,8 +1,8 @@
 package com.example.SocialNetwork.security;
 
 import com.example.SocialNetwork.configuration.Constants;
+import com.example.SocialNetwork.entity.UserRole;
 import com.example.SocialNetwork.service.JwtService;
-import com.example.SocialNetwork.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,9 +34,8 @@ public class SecurityConfig {
                                 Constants.SIGNUP_URL,
                                 Constants.LOGOUT_URL
                         ).permitAll()
-
+                        .requestMatchers(Constants.API_URL + Constants.ADMIN_PREFIX + "/**").hasRole(UserRole.ADMIN.name())
                         .requestMatchers(Constants.API_URL + "/**").authenticated()
-
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

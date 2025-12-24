@@ -8,6 +8,8 @@ import com.example.SocialNetwork.entity.ChatEntity;
 import com.example.SocialNetwork.entity.UserEntity;
 import com.example.SocialNetwork.error.AlreadyExistsException;
 import com.example.SocialNetwork.repository.ChatRepository;
+import com.example.SocialNetwork.repository.MessageRepository;
+import com.example.SocialNetwork.repository.UserRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,12 +19,14 @@ import java.util.List;
 @Service
 public class ChatService {
     private final ChatRepository repository;
-    private final UserService userService;
+    private final UserRepository userRepository;
+    private final MessageRepository messageRepository;
 
 
-    public ChatService(ChatRepository repository, UserService userService) {
+    public ChatService(ChatRepository repository, UserRepository userRepository, MessageRepository messageRepository) {
         this.repository = repository;
-        this.userService = userService;
+        this.userRepository = userRepository;
+        this.messageRepository = messageRepository;
     }
 
     private void checkUsers(Long firstUserId, Long secondUserId) {
@@ -65,8 +69,8 @@ public class ChatService {
 
     @Transactional
     public ChatRs create(ChatRq dto, Long userId) {
-        final UserEntity firstUser = userService.getEntity(dto.firstUserId());
-        final UserEntity secondUser = userService.getEntity(dto.secondUserId());
+        final UserEntity firstUser = userRepository.findById(dto.firstUserId()).get();
+        final UserEntity secondUser = userRepository.findById(dto.secondUserId()).get();
         checkUsers(dto.firstUserId(), dto.secondUserId());
         ChatEntity chatEntity = new ChatEntity();
         chatEntity.setFirstUser(firstUser);
@@ -80,7 +84,17 @@ public class ChatService {
     @Transactional
     public ChatRs delete(Long id, Long userId) {
         final ChatEntity entity = getEntity(id);
+        messageRepository.deleteAllByChat_Id(id);
         repository.delete(entity);
         return ChatRs.from(entity, userId);
+    }
+
+    public void deleteChatsByUserId(Long userId) {
+        var chats = getByUser(userId);
+        for (var chat : chats) {
+            messageRepository.deleteAllByChat_Id(chat.id());
+        }
+        repository.deleteAllByFirstUserId(userId);
+        repository.deleteAllBySecondUserId(userId);
     }
 }

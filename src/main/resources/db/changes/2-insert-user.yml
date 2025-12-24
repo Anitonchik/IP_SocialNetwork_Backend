@@ -1,0 +1,38 @@
+databaseChangeLog:
+  # Создание администратора
+  - changeSet:
+      id: insert-admin-user
+      author: Anita
+      preConditions:
+        - onFail: MARK_RAN
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  value: Admin
+              - column:
+                  name: last_name
+                  value: User
+              - column:
+                  name: user_name
+                  value: admin
+              - column:
+                  name: user_avatarurl
+                  value: https://example.com/default-avatar.png
+              - column:
+                  name: user_description
+                  value: System administrator
+              - column:
+                  name: page_address
+                  value: admin
+              - column:
+                  name: phone
+                  value: +7 (999) 000-11-22
+              - column:
+                  name: password
+                  value: "$2a$12$CVaS8WRKcl1dp0fLfc4k/Ovj9Aid24zl/usJg1JPgjDp6GDMbXxUy"
+              - column:
+                  name: user_role
+                  value: ADMIN

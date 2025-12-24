@@ -26,4 +26,7 @@ public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
             "LIMIT 1", nativeQuery = true)
     Optional<ChatEntity> findChatByUsers(@Param("firstUserId") Long firstUserId, @Param("secondUserId") Long secondUserId);
 
+    void deleteAllByFirstUserId(Long userId);
+    void deleteAllBySecondUserId(Long userId);
+
 }

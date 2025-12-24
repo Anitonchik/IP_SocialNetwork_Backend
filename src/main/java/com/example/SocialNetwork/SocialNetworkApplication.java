@@ -89,7 +89,7 @@ public class SocialNetworkApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		//populateData();
+		populateData();
 		if (args.length == 0) {
 			return;
 		}

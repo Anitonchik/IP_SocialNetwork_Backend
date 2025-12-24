@@ -7,6 +7,7 @@ import com.example.SocialNetwork.entity.Report;
 import com.example.SocialNetwork.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -102,6 +103,7 @@ public class UserController {
         return userService.createSubscription(id, userFollowingId);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public UserRs delete(@PathVariable Long id) {
         return userService.delete(id);

@@ -14,8 +14,8 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    private final String secretKey = "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI="; // Base64, 32+ байт
-    private final long jwtExpiration = 86400000; // 24 часа
+    private final String secretKey = "MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI=";
+    private final long jwtExpiration = 8640000;
 
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
