@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -54,7 +55,7 @@ public class PostService {
     @Transactional
     public PostRs create(PostRq dto) {
         final UserEntity user = typeService.getEntity(dto.userId());
-        PostEntity entity = new PostEntity(user, dto.postImageURL(), dto.postTextContent());
+        PostEntity entity = new PostEntity(user, dto.postImageURL(), dto.postTextContent(), dto.createdAt());
         entity = repository.save(entity);
         return PostRs.from(entity);
     }
@@ -66,6 +67,7 @@ public class PostService {
         entity.setUser(typeService.getEntity(dto.userId()));
         entity.setPostImageURL(dto.postImageURL());
         entity.setPostTextContent(dto.postTextContent());
+        entity.setIsEdited(true);
         entity = repository.save(entity);
         return PostRs.from(entity);
     }

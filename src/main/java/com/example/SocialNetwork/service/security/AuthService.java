@@ -1,18 +1,15 @@
-package com.example.SocialNetwork.service;
+package com.example.SocialNetwork.service.security;
 
 import com.example.SocialNetwork.api.security.UserJWTRs;
 import com.example.SocialNetwork.api.user.UserLoginRq;
 import com.example.SocialNetwork.api.user.UserRq;
+import com.example.SocialNetwork.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 @Service
 public class AuthService {

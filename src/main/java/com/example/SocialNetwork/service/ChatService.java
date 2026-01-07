@@ -29,10 +29,9 @@ public class ChatService {
         this.messageRepository = messageRepository;
     }
 
-    private void checkUsers(Long firstUserId, Long secondUserId) {
-        repository.findChatByUsers(firstUserId, secondUserId).ifPresent(val -> {
-            throw new AlreadyExistsException(ChatEntity.class, firstUserId, secondUserId);
-        });
+    public Boolean checkUsers(Long firstUserId, Long secondUserId) {
+        var chat = repository.findChatByUsers(firstUserId, secondUserId);
+        return chat.isPresent();
     }
 
     //@Transactional(propagation = Propagation.MANDATORY)
@@ -71,14 +70,17 @@ public class ChatService {
     public ChatRs create(ChatRq dto, Long userId) {
         final UserEntity firstUser = userRepository.findById(dto.firstUserId()).get();
         final UserEntity secondUser = userRepository.findById(dto.secondUserId()).get();
-        checkUsers(dto.firstUserId(), dto.secondUserId());
-        ChatEntity chatEntity = new ChatEntity();
-        chatEntity.setFirstUser(firstUser);
-        chatEntity.setSecondUser(secondUser);
-        //chatEntity.setCreatedAt(dto.createdAt());
+        if (!checkUsers(dto.firstUserId(), dto.secondUserId())) {
+            ChatEntity chatEntity = new ChatEntity();
+            chatEntity.setFirstUser(firstUser);
+            chatEntity.setSecondUser(secondUser);
 
-        chatEntity = repository.save(chatEntity);
-        return ChatRs.from(chatEntity, userId);
+            chatEntity = repository.save(chatEntity);
+            return ChatRs.from(chatEntity, userId);
+        }
+        else {
+            return getByUsers(firstUser.getId(), secondUser.getId());
+        }
     }
 
     @Transactional

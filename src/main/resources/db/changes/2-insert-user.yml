@@ -20,7 +20,7 @@ databaseChangeLog:
                   value: admin
               - column:
                   name: user_avatarurl
-                  value: https://example.com/default-avatar.png
+                  value: ""
               - column:
                   name: user_description
                   value: System administrator

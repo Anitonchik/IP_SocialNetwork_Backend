@@ -3,14 +3,11 @@ package com.example.SocialNetwork.api.security;
 import com.example.SocialNetwork.api.user.UserLoginRq;
 import com.example.SocialNetwork.api.user.UserRq;
 import com.example.SocialNetwork.configuration.Constants;
-import com.example.SocialNetwork.service.AuthService;
+import com.example.SocialNetwork.service.security.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @RestController
 public class AuthController {

@@ -6,6 +6,7 @@ import com.example.SocialNetwork.configuration.Constants;
 import com.example.SocialNetwork.service.PostService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,8 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping
+    //@PreAuthorize("permitAll()")
+    @GetMapping("allPosts")
     public PageRs<PostRs> getAll(@RequestParam(defaultValue = "1") @Min(1) int page,
                                  @RequestParam(defaultValue = "10") @Min(1) int size) {
         return postService.getAll(PageHelper.toPageable(page, size));

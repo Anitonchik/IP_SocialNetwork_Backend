@@ -35,6 +35,9 @@ public class ChatController {
     @GetMapping("/userschats/{userId}")
     public List<ChatRs> getChatsByUser(@PathVariable Long userId) {return chatService.getByUser(userId);}
 
+    @GetMapping("/userschats/checkavailability/{userId}/{subscribedUserId}")
+    public Boolean getChatsByUser(@PathVariable Long userId, @PathVariable Long subscribedUserId) {return chatService.checkUsers(userId, subscribedUserId);}
+
     @GetMapping("/userschat/{userId}/{subscribedUserId}")
     public ChatRs getChatByUsers(@PathVariable Long userId, @PathVariable Long subscribedUserId) {return chatService.getByUsers(userId, subscribedUserId);}
 

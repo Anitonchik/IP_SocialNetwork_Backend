@@ -1,8 +1,10 @@
 package com.example.SocialNetwork.security;
 
+import com.example.SocialNetwork.api.post.PostController;
 import com.example.SocialNetwork.configuration.Constants;
 import com.example.SocialNetwork.entity.UserRole;
-import com.example.SocialNetwork.service.JwtService;
+import com.example.SocialNetwork.service.security.JwtService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,11 +23,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+    @Autowired
+    JwtAuthEntryPoint jwtAuthEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .exceptionHandling(
+                        ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
 
@@ -34,6 +40,7 @@ public class SecurityConfig {
                                 Constants.SIGNUP_URL,
                                 Constants.LOGOUT_URL
                         ).permitAll()
+                        .requestMatchers(Constants.API_URL + PostController.URL + "/allPosts").permitAll()
                         .requestMatchers(Constants.API_URL + Constants.ADMIN_PREFIX + "/**").hasRole(UserRole.ADMIN.name())
                         .requestMatchers(Constants.API_URL + "/**").authenticated()
                         .anyRequest().permitAll()
