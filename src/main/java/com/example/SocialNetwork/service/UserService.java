@@ -62,63 +62,78 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public PageRs<UserRs> getAll(Pageable pageable) {
-        return PageRs.from(repository.findAll(pageable), UserRs::from);
+    public PageRs<UserRs> getAll(Pageable pageable, Long userAuthId) {
+        return PageRs.from(repository.findAll(pageable), userAuthId, this);
     }
 
     @Transactional(readOnly = true)
     public PageRs<UserRs> getAllNotByAuthUser(Pageable pageable, Long userId) {
-        return PageRs.from(repository.findByIdNot(pageable, userId), UserRs::from);
+        return PageRs.from(repository.findByIdNot(pageable, userId), userId, this);
     }
 
     @Transactional(readOnly = true)
     public PageRs<UserRs> getFilterNotByAuthUser(Pageable pageable, String usernamePart, Long userAuthId) {
-        return PageRs.from(repository.findByUserNameContainingIgnoreCaseAndIdNot(usernamePart, userAuthId, pageable), UserRs::from);
+        return PageRs.from(repository.findByUserNameContainingIgnoreCaseAndIdNot(usernamePart, userAuthId, pageable), userAuthId, this);
     }
 
     @Transactional(readOnly = true)
     public PageRs<UserRs> getFilterSortNotByAuthUser(Pageable pageable, Long userAuthId) {
-        return PageRs.from(repository.findByIdNotOrderByUserNameAsc(userAuthId, pageable), UserRs::from);
+        return PageRs.from(repository.findByIdNotOrderByUserNameAsc(userAuthId, pageable), userAuthId, this);
     }
 
 
     @Transactional(readOnly = true)
     public PageRs<UserRs> getFilterSortFilterNotByAuthUser(Pageable pageable, String usernamePart, Long userAuthId) {
-        return PageRs.from(repository.findByUserNameContainingIgnoreCaseAndIdNotOrderByUserNameAsc(usernamePart, userAuthId, pageable), UserRs::from);
+        return PageRs.from(repository.findByUserNameContainingIgnoreCaseAndIdNotOrderByUserNameAsc(usernamePart, userAuthId, pageable), userAuthId, this);
+    }
+
+    @Transactional(readOnly = true)
+    public PageRs<UserRs> getFollowers(Pageable pageable, Long userId) {
+            return PageRs.from(repository.findFollowersByUserId(pageable, userId), userId, this);
     }
 
 
     @Transactional(readOnly = true)
-    public List<UserRs> getFollowers(Long id) {
-        return UserRs.fromList(getEntity(id).getFollowers());
-    }
-
-    @Transactional(readOnly = true)
-    public List<UserRs> getSubscriptions(Long id) {
-        return UserRs.fromList(getEntity(id).getSubscriptions());
+    public PageRs<UserRs> getSubscriptions(Pageable pageable, Long userId) {
+        return PageRs.from(repository.findSubscriptionsByUserId(pageable, userId), userId, this);
     }
 
     @Transactional(readOnly = true)
     public Boolean getSubscription(Long id, Long subscribedUserId) {
-        var subscriptions = getEntity(id).getSubscriptions();
-        return subscriptions.stream()
-                .anyMatch(subscribedUser -> Objects.equals(subscribedUser.getId(), subscribedUserId));
+        var subscriptions = getEntity(subscribedUserId).getSubscriptions();
+        /*return subscriptions.stream()
+                .anyMatch(subscribedUser -> Objects.equals(subscribedUser.getId(), subscribedUserId));*/
+
+        for (var user : subscriptions) {
+            var flag = Objects.equals(user.getId(), id);
+            if (flag)
+                return true;
+        }
+        return false;
     }
 
-    public PageRs<UserRs> searchUsers(String searchQuery, Pageable pageable) {
+    public List<UserEntity> getSubscriptions(Long userAuthId) {
+        return getEntity(userAuthId).getSubscriptions();
+    }
+
+    public List<UserEntity> getFollowers(Long userAuthId) {
+        return getEntity(userAuthId).getFollowers();
+    }
+
+    public PageRs<UserRs> searchUsers(String searchQuery, Pageable pageable, Long userId) {
         var page = repository.findByUserNameContainingIgnoreCase(searchQuery, pageable);
-        return PageRs.from(repository.findByUserNameContainingIgnoreCase(searchQuery, pageable), UserRs::from);
+        return PageRs.from(repository.findByUserNameContainingIgnoreCase(searchQuery, pageable), userId, this);
 
     }
 
     @Transactional(readOnly = true)
     public UserRs get(Long id) {
         final UserEntity entity = getEntity(id);
-        return UserRs.from(entity);
+        return UserRs.from(entity, false);
     }
 
     @Transactional(readOnly = true)
-    public UserEntity getBuUserName(String userName) {
+    public UserEntity getByUserName(String userName) {
         final UserEntity entity = repository.findByUserName(userName).get();
         return entity;
     }
@@ -130,7 +145,7 @@ public class UserService {
                 dto.userName(), dto.userAvatarURL(), dto.userDescription(),
                 "http://" + dto.userName(), dto.phone(), passwordEncoder.encode(dto.password()));
         entity = repository.save(entity);
-        return UserRs.from(entity);
+        return UserRs.from(entity, false);
     }
 
     @Transactional
@@ -145,7 +160,7 @@ public class UserService {
         entity.setPhone(dto.phone());
         entity.setPassword(dto.password());
         entity = repository.save(entity);
-        return UserRs.from(entity);
+        return UserRs.from(entity, false);
     }
 
     @Transactional
@@ -154,7 +169,7 @@ public class UserService {
         UserEntity userFollowing = getEntity(userFollowingId);
         user.setSubscription(userFollowing);
         user = repository.save(user);
-        return UserRs.from(user);
+        return UserRs.from(user, true);
     }
 
     //userFollowing - на кого я подписана
@@ -166,7 +181,7 @@ public class UserService {
         sbc.removeIf(sub -> Objects.equals(sub.getId(), userFollowingId));
         user.setSubscriptions(sbc);
         user = repository.save(user);
-        return UserRs.fromList(user.getSubscriptions());
+        return UserRs.fromList(user.getSubscriptions(), id, this);
     }
 
     @Transactional
@@ -175,7 +190,7 @@ public class UserService {
         chatService.deleteChatsByUserId(id);
         postRepository.deleteAllByUser_Id(entity.getId());
         repository.delete(entity);
-        return UserRs.from(entity);
+        return UserRs.from(entity, false);
     }
 
     @Transactional(readOnly = true)

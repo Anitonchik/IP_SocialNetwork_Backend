@@ -438,3 +438,23 @@ SELECT COUNT(*) FROM PUBLIC.DATABASECHANGELOGLOCK [42102-240]
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "DATABASECHANGELOGLOCK" не найдена
 Table "DATABASECHANGELOGLOCK" not found; SQL statement:
 SELECT COUNT(*) FROM PUBLIC.DATABASECHANGELOGLOCK [42102-240]
+2026-01-20 13:19:25.014230+04:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "DATABASECHANGELOGLOCK" не найдена
+Table "DATABASECHANGELOGLOCK" not found; SQL statement:
+SELECT COUNT(*) FROM PUBLIC.DATABASECHANGELOGLOCK [42102-240]
+2026-01-20 13:20:59.941821+04:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "DATABASECHANGELOGLOCK" не найдена
+Table "DATABASECHANGELOGLOCK" not found; SQL statement:
+SELECT COUNT(*) FROM PUBLIC.DATABASECHANGELOGLOCK [42102-240]
+2026-01-20 13:34:46.243751+04:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "DATABASECHANGELOGLOCK" не найдена
+Table "DATABASECHANGELOGLOCK" not found; SQL statement:
+SELECT COUNT(*) FROM PUBLIC.DATABASECHANGELOGLOCK [42102-240]
+2026-01-20 13:35:34.897338+04:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "DATABASECHANGELOGLOCK" не найдена
+Table "DATABASECHANGELOGLOCK" not found; SQL statement:
+SELECT COUNT(*) FROM PUBLIC.DATABASECHANGELOGLOCK [42102-240]
+2026-01-21 23:53:12.902798+04:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Значение слишком длинное для поля "USER_DESCRIPTION CHARACTER VARYING(255)": "'alfhvbaldfhvbzxchkvbzlkhcvblfvblaihfvblafhsdvblajzdfbhlajfdhvbalfhvbaldfhvbzxch... (496)"
+Value too long for column "USER_DESCRIPTION CHARACTER VARYING(255)": "'alfhvbaldfhvbzxchkvbzlkhcvblfvblaihfvblafhsdvblajzdfbhlajfdhvbalfhvbaldfhvbzxch... (496)"; SQL statement:
+insert into users (first_name,last_name,page_address,password,phone,user_avatarurl,user_description,user_name,user_role,id) values (?,?,?,?,?,?,?,?,?,default) [22001-240]

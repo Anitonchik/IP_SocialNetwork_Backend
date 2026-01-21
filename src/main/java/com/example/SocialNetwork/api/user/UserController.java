@@ -25,19 +25,20 @@ public class UserController {
 
     @GetMapping
     public PageRs<UserRs> getAll(@RequestParam(defaultValue = "1") @Min(1) int page,
-                                 @RequestParam(defaultValue = "10") @Min(1) int size) {
-        return userService.getAll(PageHelper.toPageable(page, size));
+                                 @RequestParam(defaultValue = "10") @Min(1) int size,
+                                 @RequestParam Long userId) {
+        return userService.getAll(PageHelper.toPageable(page, size), userId);
     }
 
     @GetMapping("/users")
-    public PageRs<UserRs> getAllWhithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
+    public PageRs<UserRs> getAllWithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
                                  @RequestParam(defaultValue = "10") @Min(1) int size,
                                                  @RequestParam Long userId) {
         return userService.getAllNotByAuthUser(PageHelper.toPageable(page, size), userId);
     }
 
     @GetMapping("/users/filter")
-    public PageRs<UserRs> getFilterWhithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
+    public PageRs<UserRs> getFilterWithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
                                                  @RequestParam(defaultValue = "10") @Min(1) int size,
                                                  @RequestParam String userNamePart,
                                                  @RequestParam Long userId) {
@@ -45,14 +46,14 @@ public class UserController {
     }
 
     @GetMapping("/users/sort")
-    public PageRs<UserRs> getSortWhithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
+    public PageRs<UserRs> getSortWithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
                                                     @RequestParam(defaultValue = "10") @Min(1) int size,
                                                     @RequestParam Long userId) {
         return userService.getFilterSortNotByAuthUser(PageHelper.toPageable(page, size), userId);
     }
 
     @GetMapping("/users/sort/filter")
-    public PageRs<UserRs> getSortFilterWhithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
+    public PageRs<UserRs> getSortFilterWithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
                                                   @RequestParam(defaultValue = "10") @Min(1) int size,
                                                   @RequestParam(defaultValue = "") String userNamePart,
                                                   @RequestParam Long userId) {
@@ -67,14 +68,18 @@ public class UserController {
         return userService.get(id);
     }
 
-    @GetMapping("/followers/{id}")
-    public List<UserRs> getFollowers(@PathVariable Long id) {
-        return userService.getFollowers(id);
+    @GetMapping("/followers")
+    public PageRs<UserRs> getFollowers(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                       @RequestParam(defaultValue = "10") @Min(1) int size,
+                                       @RequestParam Long userId) {
+        return userService.getFollowers(PageHelper.toPageable(page, size), userId);
     }
 
-    @GetMapping("/subscriptions/{id}")
-    public List<UserRs> getSubscriptions(@PathVariable Long id) {
-        return userService.getSubscriptions(id);
+    @GetMapping("/subscriptions")
+    public PageRs<UserRs> getSubscriptions(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                         @RequestParam(defaultValue = "10") @Min(1) int size,
+                                         @RequestParam Long userId) {
+        return userService.getSubscriptions(PageHelper.toPageable(page, size), userId);
     }
 
     @GetMapping("/subscription/{id}/{userFollowingId}")

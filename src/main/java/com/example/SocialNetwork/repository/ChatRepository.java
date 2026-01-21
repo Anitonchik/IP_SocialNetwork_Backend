@@ -15,16 +15,7 @@ public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
             nativeQuery = true)
     List<ChatEntity> findUsersChats(@Param("userId") Long userId);
 
-    /*@Query(value = "SELECT * FROM chats " +
-            "WHERE LEAST(first_user_id, second_user_id) = LEAST(:firstUserId, :secondUserId) " +
-            "AND GREATEST(first_user_id, second_user_id) = GREATEST(:firstUserId, :secondUserId) " +
-            "LIMIT 1", nativeQuery = true)*/
-
-    @Query(value = "SELECT * FROM chats " +
-            "WHERE first_user_id = :firstUserId " +
-            "AND second_user_id = :secondUserId " +
-            "LIMIT 1", nativeQuery = true)
-    Optional<ChatEntity> findChatByUsers(@Param("firstUserId") Long firstUserId, @Param("secondUserId") Long secondUserId);
+    Optional<ChatEntity> findByFirstUser_IdAndSecondUser_Id(Long firstUserId, Long secondUserId);
 
     void deleteAllByFirstUserId(Long userId);
     void deleteAllBySecondUserId(Long userId);

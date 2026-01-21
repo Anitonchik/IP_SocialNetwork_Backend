@@ -8,10 +8,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-public record MessageRs (Long id, ChatRs chat, UserRs user, String messageText, Date createdAt, Boolean isEdited) {
+public record MessageRs (Long id, UserRs user, String messageText, Date createdAt, Boolean isEdited) {
     public static MessageRs from(MessageEntity message) {
-        return new MessageRs(message.getId(), ChatRs.from(message.getChat(), message.getUser().getId()), UserRs.from(message.getUser()), message.getMessageText(),
-                message.getCreatedAt(), message.getIsEdited());
+        return new MessageRs(message.getId(), UserRs.from(message.getUser(), false),
+                message.getMessageText(), message.getCreatedAt(), message.getIsEdited());
     }
 
     public static List<MessageRs> fromList(Iterable<MessageEntity> entities) {

@@ -30,7 +30,7 @@ public class ChatService {
     }
 
     public Boolean checkUsers(Long firstUserId, Long secondUserId) {
-        var chat = repository.findChatByUsers(firstUserId, secondUserId);
+        var chat = repository.findByFirstUser_IdAndSecondUser_Id(firstUserId, secondUserId);
         return chat.isPresent();
     }
 
@@ -61,7 +61,7 @@ public class ChatService {
     @Transactional(readOnly = true)
     public ChatRs getByUsers(Long userId, Long correspondenceUser) {
         return ChatRs.from(
-                repository.findChatByUsers(userId, correspondenceUser)
+                repository.findByFirstUser_IdAndSecondUser_Id(userId, correspondenceUser)
                         .orElseThrow(() -> new RuntimeException("Чат между пользователями не найден")), userId
         );
     }

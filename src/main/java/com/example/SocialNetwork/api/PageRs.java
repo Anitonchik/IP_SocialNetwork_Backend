@@ -1,7 +1,10 @@
 package com.example.SocialNetwork.api;
 
 import com.example.SocialNetwork.api.chat.ChatRs;
+import com.example.SocialNetwork.api.user.UserRs;
 import com.example.SocialNetwork.entity.ChatEntity;
+import com.example.SocialNetwork.entity.UserEntity;
+import com.example.SocialNetwork.service.UserService;
 import org.springframework.data.domain.Page;
 
 import java.util.Collections;
@@ -53,7 +56,20 @@ public record PageRs<D>(
                 page.hasPrevious());
     }
 
-
+    public static PageRs<UserRs> from(Page<UserEntity> page, Long userAuthId, UserService userService) {
+        var usersRs = UserRs.fromList(page.getContent(), userAuthId, userService);
+        return new PageRs<>(
+                usersRs,
+                page.getNumberOfElements(),
+                page. getNumber() + 1,
+                page.getSize(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                page.isFirst(),
+                page.isLast(),
+                page.hasNext(),
+                page. hasPrevious());
+    }
 
 
 }

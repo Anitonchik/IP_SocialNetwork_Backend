@@ -48,7 +48,7 @@ public class MessageService {
 
     @Transactional(readOnly = true)
     public List<MessageRs> getByChat(Long chatId) {
-        return MessageRs.fromList(repository.findByChat_Id(chatId));
+        return MessageRs.fromList(repository.findByChat_IdOrderByCreatedAtAsc(chatId));
     }
 
     @Transactional

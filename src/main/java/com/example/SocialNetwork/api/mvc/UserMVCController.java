@@ -32,6 +32,7 @@ public class UserMVCController {
 
     @GetMapping
     public String getAllUsers(
+            @RequestParam Long userId,
             @RequestParam(defaultValue = "1") @Min(1) int page,
             @RequestParam(defaultValue = "10") @Min(1) int size,
             @RequestParam(required = false) String search,
@@ -39,13 +40,13 @@ public class UserMVCController {
 
         Pageable pageable = PageHelper.toPageable(page, size);
 
-        PageRs<UserRs> pageRs = userService.getAll(pageable);
+        PageRs<UserRs> pageRs = userService.getAll(pageable, userId);
 
         if (search != null && !search.trim().isEmpty()) {
-            pageRs = userService.searchUsers(search.trim(), pageable);
+            pageRs = userService.searchUsers(search.trim(), pageable, userId);
             model.addAttribute("searchQuery", search.trim());
         } else {
-            pageRs = userService.getAll(pageable);
+            pageRs = userService.getAll(pageable, userId);
             model.addAttribute("searchQuery", null);
         }
 

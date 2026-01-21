@@ -37,7 +37,7 @@ public class AuthService {
             throw new BadCredentialsException("Invalid username or password");
         }
 
-        var userEntity = userService.getBuUserName(username);
+        var userEntity = userService.getByUserName(username);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         String jwt = jwtService.generateToken(userDetails);

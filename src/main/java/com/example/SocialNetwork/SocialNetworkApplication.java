@@ -39,9 +39,9 @@ public class SocialNetworkApplication implements CommandLineRunner {
 		final var user4 = userService.create(new UserRq("fN", "lN", "pou", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUBZ4KmdoWceKPI69RDlzV-QieP-GOkYVdnw&s",
 				"desc", "+7 (999) 999-99-96", "1"));
 
-		userService.createSubscription(1L, 2L);
-		userService.createSubscription(1L, 3L);
-		userService.createSubscription(1L, 4L);
+		userService.createSubscription(2L, 1L);
+		userService.createSubscription(2L, 3L);
+		userService.createSubscription(2L, 4L);
 		userService.createSubscription(4L, 1L);
 
 		final var post1 = postService.create(new PostRq(1L, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR6mnq4H6pO_Ii0O5Qe8ZpzH2gKeMfJ7irIw&s", "ddcs", new Date()));

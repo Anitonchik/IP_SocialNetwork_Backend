@@ -25,6 +25,9 @@ public class ChatEntity extends BaseEntity{
     @JoinColumn(name = "second_user_id", nullable = false)
     private UserEntity secondUser;
 
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
+    private List<MessageEntity> messages;
+
     public ChatEntity() {super();}
 
     public ChatEntity(UserEntity firstUser, UserEntity secondUser) {
@@ -40,6 +43,10 @@ public class ChatEntity extends BaseEntity{
     public UserEntity getSecondUser() { return secondUser; }
 
     public void setSecondUser(UserEntity secondUser) { this.secondUser = secondUser; }
+
+    public List<MessageEntity> getMessages() { return messages; }
+
+    public void setMessages(List<MessageEntity> messages) { this.messages = messages; }
 
     @PrePersist
     @PreUpdate

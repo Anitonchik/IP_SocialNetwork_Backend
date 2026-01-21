@@ -17,12 +17,24 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByPhone(String phone);
     Page<UserEntity> findByIdNot(Pageable pageable, Long userId);
 
-    /*@Query("SELECT c.createdAt as date, " +
-            "COUNT(*) as chatCount " +
-            "FROM Chats c " +
-            "WHERE (c.firstUser.id = :userId OR c.secondUser.id = :userId) " +
-            "GROUP c.createdAt" +
-            "ORDER BY date ")*/
+    Page<UserEntity> findByUserNameContainingIgnoreCase(String userName, Pageable pageable);
+
+    Page<UserEntity> findByUserNameContainingIgnoreCaseAndIdNot(String usernamePart, Long userAuthId, Pageable pageable);
+    Page<UserEntity> findByUserNameContainingIgnoreCaseAndIdNotOrderByUserNameAsc(String usernamePart, Long userAuthId, Pageable pageable);
+    Page<UserEntity> findByIdNotOrderByUserNameAsc(Long userAuthId, Pageable pageable);
+
+    @Query(value = "SELECT u.* FROM users u " +
+            "INNER JOIN subscriptions s ON u.id = s.user_id " +
+            "WHERE s.subscribed_user_id = :userId",
+            nativeQuery = true)
+    Page<UserEntity> findFollowersByUserId(Pageable pageable, @Param("userId") Long userId);
+
+    @Query(value = "SELECT u.* FROM users u " +
+            "INNER JOIN subscriptions s ON u.id = s.subscribed_user_id " +
+            "WHERE s.user_id = :userId",
+            nativeQuery = true)
+    Page<UserEntity> findSubscriptionsByUserId(Pageable pageable, @Param("userId") Long userId);
+
     @Query(value = "SELECT EXTRACT(DAY FROM c.CREATED_AT) as date, " +
             "COUNT(*) as chatCount " +
             "FROM Chats c " +
@@ -31,9 +43,4 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "ORDER BY date", nativeQuery = true)
     List<Report> getUserStatistics(@Param("userId") Long userId);
 
-    Page<UserEntity> findByUserNameContainingIgnoreCase(String userName, Pageable pageable);
-
-    Page<UserEntity> findByUserNameContainingIgnoreCaseAndIdNot(String usernamePart, Long userAuthId, Pageable pageable);
-    Page<UserEntity> findByUserNameContainingIgnoreCaseAndIdNotOrderByUserNameAsc(String usernamePart, Long userAuthId, Pageable pageable);
-    Page<UserEntity> findByIdNotOrderByUserNameAsc(Long userAuthId, Pageable pageable);
 }
