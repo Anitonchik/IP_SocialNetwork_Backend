@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html
+        lang="ru"
+        class="h-100"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Social Network</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" th:href="@{/styles.css}">
+
+    <script>
+        function backToUsers() {
+            window.location.href = `/users`;
+        }
+    </script>
+
+</head>
+
+<body class="background">
+<nav class="container-background container d-flex flex-column justify-content-between align-items-center p-2 gap-5 mt-0 mb-0" style="max-width: 1000px; margin: auto;">
+    <div class="d-flex gap-1 gap-md-5 gap-2 flex-row align-items-center">
+        <div class="d-flex align-items-center gap-3">
+            <img th:src="${chat.correspondenceUser.userAvatarURL}"
+                 style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+            <span class="navbar-brand mb-0 h6 main-text" th:text="${chat.correspondenceUser.userName}"></span>
+        </div>
+    </div>
+    <div class="main-text" onClick="backToUsers()" style="cursor: pointer;">
+        users
+    </div>
+</nav>
+
+<div class="d-flex flex-column justify-content-center g-0 align-items-center " style="max-width: 1000px; height: 85vh; margin: auto;">
+    <div class="container container-background align-items-center some-chat  m-0">
+        <div th:each="msg : ${messages}">
+            <div th:if="${msg.showDate}" class="d-block text-center">
+                <div class="date-message-text"
+                     th:text="${msg.day + ' ' + msg.month}"></div>
+            </div>
+
+            <div th:classappend="${msg.sender == 'your' ? 'your-message' : 'stranger-message'}"
+                 class="d-block"
+                 th:data-message-id="${msg.id}">
+
+                <div class="message-chat-text" th:text="${msg.messageText}"></div>
+
+                <div class="message-chat-time">
+                    <span th:if="${msg.edited}">edited </span>
+                    <span th:text="${msg.time}"></span>
+                </div>
+
+                <div th:if="${msg.sender == 'your'}" class="message-menu gap-5" style="width:300px">
+
+                        <form th:action="@{/chat/edit/{id}(id=${msg.id})}"
+                              method="post"
+                              class="edit-form"
+                              th:data-message-id="${msg.id}">
+
+                            <input type="hidden" name="chatId" th:value="${chat.id}">
+
+                            <input type="hidden" name="messageText" th:id="'edit-text-' + ${msg.id}">
+
+                            <button type="button"
+                                    class="btn-text message-chat-text edit-btn"
+                                    th:data-message-id="${msg.id}"
+                                    onclick="showEditForm(this)">
+                                Edit
+                            </button>
+                        </form>
+
+                        <form th:action="@{/chat/delete-message/{id}(id=${msg.id})}"
+                              method="post"
+                              onsubmit="return confirm('Delete this message?')">
+                            <input type="hidden" name="chatId" th:value="${chat.id}">
+                            <button type="submit" class="btn-text message-chat-text">
+                                Delete
+                            </button>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${chat != null}" class="form-group container container-background enter-message d-flex align-items-center justify-content-between"
+    style="width: 1000px;">
+        <form th:action="@{/chat/send}" class="col-12" method="post" id="messageForm">
+            <input type="hidden" name="chatId" th:value="${chat.id}">
+            <div class="d-flex flex-row align-items-center justify-content-between">
+                <div style="flex-grow: 1; margin-right: 15px;">
+                        <textarea name="messageText"
+                                  id="messageText"
+                                  placeholder="Message"
+                                  rows="2"
+                                  oninput="autoResize(this)"
+                                  onkeydown="handleKeyDown(event)"></textarea>
+                </div>
+                <div class="send-button">
+                    <button type="button" onclick="sendMessage()" class="bi bi-chevron-double-right pe-5 h1"
+                            style="color: #fffacd; background: transparent; border: none;">
+
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div th:if="${isEditing}" class="message-input-container">
+        <form th:action="@{/chat/edit/{id}(id=${editMessage.id})}" method="post" id="editForm">
+            <input type="hidden" name="chatId" th:value="${chat.id}">
+            <div class="d-flex align-items-center">
+                <input type="text"
+                       name="messageText"
+                       th:value="${editMessage.messageText}"
+                       class="form-control me-2">
+                <button type="submit" class="btn btn-primary me-2">Save</button>
+                <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Авторесайз textarea
+    function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+    }
+
+    // Обработка Enter для отправки
+    function handleKeyDown(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    }
+
+    // Отправка сообщения
+    function sendMessage() {
+        const form = document.getElementById('messageForm');
+        const textarea = document.getElementById('messageText');
+
+        if (textarea.value.trim()) {
+            form.submit();
+        }
+    }
+
+    // Редактирование сообщения
+    function editMessage(messageId) {
+        // Можно реализовать AJAX запрос или показать форму редактирования
+        const messageDiv = document.querySelector(`[data-message-id="${messageId}"]`);
+        const messageText = messageDiv.querySelector('.message-chat-text').textContent;
+
+        // Заполняем форму редактирования
+        document.querySelector('#editForm input[name="messageText"]').value = messageText;
+        document.querySelector('#editForm').style.display = 'block';
+        document.querySelector('#messageForm').style.display = 'none';
+    }
+
+    function cancelEdit() {
+        document.querySelector('#editForm').style.display = 'none';
+        document.querySelector('#messageForm').style.display = 'flex';
+    }
+
+    // Прокрутка вниз при загрузке
+    window.onload = function() {
+        const messagesContainer = document.querySelector('.messages-container');
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    };
+</script>
+</body>
+</html>

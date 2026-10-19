@@ -1,0 +1,116 @@
+package com.example.SocialNetwork.api.user;
+
+import com.example.SocialNetwork.api.PageHelper;
+import com.example.SocialNetwork.api.PageRs;
+import com.example.SocialNetwork.configuration.Constants;
+import com.example.SocialNetwork.entity.Report;
+import com.example.SocialNetwork.service.UserService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(Constants.API_URL + UserController.URL)
+public class UserController {
+    public static final String URL = "/users";
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+
+    @GetMapping
+    public PageRs<UserRs> getAll(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                 @RequestParam(defaultValue = "10") @Min(1) int size,
+                                 @RequestParam Long userId) {
+        return userService.getAll(PageHelper.toPageable(page, size), userId);
+    }
+
+    @GetMapping("/users")
+    public PageRs<UserRs> getAllWithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                 @RequestParam(defaultValue = "10") @Min(1) int size,
+                                                 @RequestParam Long userId) {
+        return userService.getAllNotByAuthUser(PageHelper.toPageable(page, size), userId);
+    }
+
+    @GetMapping("/users/filter")
+    public PageRs<UserRs> getFilterWithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                                 @RequestParam(defaultValue = "10") @Min(1) int size,
+                                                 @RequestParam String userNamePart,
+                                                 @RequestParam Long userId) {
+        return userService.getFilterNotByAuthUser(PageHelper.toPageable(page, size), userNamePart, userId);
+    }
+
+    @GetMapping("/users/sort")
+    public PageRs<UserRs> getSortWithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                                    @RequestParam(defaultValue = "10") @Min(1) int size,
+                                                    @RequestParam Long userId) {
+        return userService.getFilterSortNotByAuthUser(PageHelper.toPageable(page, size), userId);
+    }
+
+    @GetMapping("/users/sort/filter")
+    public PageRs<UserRs> getSortFilterWithoutAuthUser(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                                  @RequestParam(defaultValue = "10") @Min(1) int size,
+                                                  @RequestParam(defaultValue = "") String userNamePart,
+                                                  @RequestParam Long userId) {
+        return userService.getFilterSortFilterNotByAuthUser(PageHelper.toPageable(page, size), userNamePart, userId);
+    }
+
+    @PostMapping
+    public UserRs create(@RequestBody @Valid UserRq dto) {return userService.create(dto);}
+
+    @GetMapping("/{id}")
+    public UserRs get(@PathVariable Long id) {
+        return userService.get(id);
+    }
+
+    @GetMapping("/followers")
+    public PageRs<UserRs> getFollowers(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                       @RequestParam(defaultValue = "10") @Min(1) int size,
+                                       @RequestParam Long userId) {
+        return userService.getFollowers(PageHelper.toPageable(page, size), userId);
+    }
+
+    @GetMapping("/subscriptions")
+    public PageRs<UserRs> getSubscriptions(@RequestParam(defaultValue = "1") @Min(1) int page,
+                                         @RequestParam(defaultValue = "10") @Min(1) int size,
+                                         @RequestParam Long userId) {
+        return userService.getSubscriptions(PageHelper.toPageable(page, size), userId);
+    }
+
+    @GetMapping("/subscription/{id}/{userFollowingId}")
+    public Boolean getSubscription(@PathVariable Long id, @PathVariable Long userFollowingId) {
+        return userService.getSubscription(id, userFollowingId);
+    }
+
+    @GetMapping("statistic/{id}")
+    public List<Report> getStatistic(@PathVariable Long id) {
+        return userService.getStatistic(id);
+    }
+
+    @DeleteMapping("/subscription/{id}/{userFollowingId}")
+    public List<UserRs> deleteSubscription(@PathVariable Long id, @PathVariable Long userFollowingId) {
+        return userService.deleteSubscription(id, userFollowingId);
+    }
+
+    @PutMapping("/{id}")
+    public UserRs update(@PathVariable Long id, @RequestBody @Valid UserRq dto) {
+        return userService.update(id, dto);
+    }
+
+    //subscribedUserId - на кого подписываюсь
+    @PutMapping("/{id}/{userFollowingId}")
+    public UserRs createSubscriptions(@PathVariable Long id, @PathVariable Long userFollowingId) {
+        return userService.createSubscription(id, userFollowingId);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public UserRs delete(@PathVariable Long id) {
+        return userService.delete(id);
+    }
+}
